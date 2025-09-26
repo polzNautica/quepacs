@@ -7,10 +7,13 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head />
+      <link href="/manifest.json" rel="manifest" />
+      <meta name="theme-color" content="#0f172a" />
+      <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
+          fontSans.variable
         )}
       >
         <Main />
