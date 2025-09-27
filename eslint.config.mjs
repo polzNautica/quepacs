@@ -97,13 +97,13 @@ export default defineConfig([globalIgnores([
         "unused-imports/no-unused-vars": "off",
         "unused-imports/no-unused-imports": "warn",
 
-        "@typescript-eslint/no-unused-vars": ["warn", {
+        "@typescript-eslint/no-unused-vars": ["off", {
             args: "after-used",
             ignoreRestSiblings: false,
             argsIgnorePattern: "^_.*?$",
         }],
 
-        "import/order": ["warn", {
+        "import/order": ["off", {
             groups: [
                 "type",
                 "builtin",
@@ -126,7 +126,7 @@ export default defineConfig([globalIgnores([
 
         "react/self-closing-comp": "warn",
 
-        "react/jsx-sort-props": ["warn", {
+        "react/jsx-sort-props": ["off", {
             callbacksLast: true,
             shorthandFirst: true,
             noSortAlphabetically: false,

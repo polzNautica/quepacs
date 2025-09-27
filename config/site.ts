@@ -5,25 +5,17 @@ export const siteConfig = {
   description: "Make beautiful websites regardless of your design experience.",
   navItems: [
     {
-      label: "Home",
+      label: "Laman Utama",
       href: "/",
     },
     {
-      label: "Docs",
-      href: "/docs",
+      label: "Login",
+      href: "/login",
     },
     {
-      label: "Pricing",
-      href: "/pricing",
-    },
-    {
-      label: "Blog",
-      href: "/blog",
-    },
-    {
-      label: "About",
-      href: "/about",
-    },
+      label: "Register",
+      href: "/register",
+    }
   ],
   navMenuItems: [
     {
@@ -34,26 +26,26 @@ export const siteConfig = {
       label: "Dashboard",
       href: "/dashboard",
     },
-    {
-      label: "Projects",
-      href: "/projects",
-    },
-    {
-      label: "Team",
-      href: "/team",
-    },
-    {
-      label: "Calendar",
-      href: "/calendar",
-    },
-    {
-      label: "Settings",
-      href: "/settings",
-    },
-    {
-      label: "Help & Feedback",
-      href: "/help-feedback",
-    },
+    // {
+    //   label: "Projects",
+    //   href: "/projects",
+    // },
+    // {
+    //   label: "Team",
+    //   href: "/team",
+    // },
+    // {
+    //   label: "Calendar",
+    //   href: "/calendar",
+    // },
+    // {
+    //   label: "Settings",
+    //   href: "/settings",
+    // },
+    // {
+    //   label: "Help & Feedback",
+    //   href: "/help-feedback",
+    // },
     {
       label: "Logout",
       href: "/logout",

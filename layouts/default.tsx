@@ -4,6 +4,8 @@ import { Head } from "./head";
 
 import { Navbar } from "@/components/navbar";
 
+import { Divider } from "@heroui/react";
+
 export default function DefaultLayout({
   children,
 }: {
@@ -16,7 +18,16 @@ export default function DefaultLayout({
       <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
         {children}
       </main>
+      <Divider />
       <footer className="w-full flex items-center justify-center py-3">
+        <p className="text-xs text-gray-500 text-center">
+          {" "}
+          © 2024-2025 Powered by FK Technology Sdn Bhd (929210-W). All Rights
+          Reserved.
+        </p>
+      </footer>
+
+      {/* <footer className="w-full flex items-center justify-center py-3">
         <Link
           isExternal
           className="flex items-center gap-1 text-current"
@@ -26,7 +37,7 @@ export default function DefaultLayout({
           <span className="text-default-600">Powered by</span>
           <p className="text-primary">HeroUI</p>
         </Link>
-      </footer>
+      </footer> */}
     </div>
   );
 }
