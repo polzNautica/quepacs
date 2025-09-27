@@ -1,12 +1,14 @@
 {
   "name": "next-pages-template",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --fix"
+    "lint": "eslint --fix",
+    "clean": "rimraf dist && rimraf .next"
   },
   "dependencies": {
     "@heroui/button": "2.2.26",
@@ -33,7 +35,8 @@
     "next-themes": "0.4.6",
     "prisma": "^6.16.2",
     "react": "19.1.1",
-    "react-dom": "19.1.1"
+    "react-dom": "19.1.1",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@eslint/compat": "1.2.8",
@@ -57,6 +60,7 @@
     "globals": "16.0.0",
     "postcss": "8.5.6",
     "prettier": "3.5.3",
+    "rimraf": "^6.0.1",
     "tailwind-variants": "3.1.1",
     "tailwindcss": "4.1.11",
     "typescript": "5.6.3"

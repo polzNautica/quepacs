@@ -1,23 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/server/prisma-client";
 
-// /api/users
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse,
 ) {
 	if (req.method === "GET") {
-		// Fetch all users with their roles
-		const users = await prisma.users.findMany({
+		// Fetch all user with their role
+		const user = await prisma.user.findMany({
 			include: {
-				user_roles: {
-					include: {
-						roles: true,
-					},
-				},
+				user_role: true,
 			},
 		});
-		return res.status(200).json(users);
+		return res.status(200).json(user);
 	}
 
 	if (req.method === "POST") {
@@ -28,7 +23,7 @@ export default async function handler(
 		}
 
 		try {
-			const newUser = await prisma.users.create({
+			const newUser = await prisma.user.create({
 				data: {
 					email,
 					username,

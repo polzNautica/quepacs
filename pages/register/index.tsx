@@ -1,12 +1,17 @@
-import { Input } from "@heroui/input";
-import { Button } from "@heroui/button";
-import { title } from "@/components/primitives";
-import { Form } from "@heroui/form";
-import LoginLayout from "@/layouts/login";
+// pages/register.tsx
 import { useState } from "react";
-import { addToast } from "@heroui/react";
-import RowSteps from "@/components/row-steps";
 import {
+  registerFieldValidator,
+  createConfirmPasswordValidator,
+} from "@/lib/validationSchemas";
+import { useRouter } from "next/router";
+import { title } from "@/components/primitives";
+import LoginLayout from "@/layouts/login";
+import {
+  Button,
+  Form,
+  addToast,
+  Input,
   Card,
   CardHeader,
   CardBody,
@@ -14,189 +19,295 @@ import {
   Image,
   CardFooter,
   Link,
+  Select,
+  SelectItem,
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
 
+export const nationalityOptions = [
+  { value: "Malaysian", label: "Warganegara" },
+  { value: "NonMalaysian", label: "Bukan Warganegara" },
+];
+
+export const genderOptions = [
+  { value: "Male", label: "Lelaki" },
+  { value: "Female", label: "Perempuan" },
+];
+
 export default function RegisterPage() {
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const router = useRouter();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
+  const [loading, setLoading] = useState(false);
+  const [nationality, setNationality] = useState("Malaysian");
+  const [gender, setGender] = useState("");
+  const [password, setPassword] = useState("");
+
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
   const toggleConfirmPasswordVisibility = () =>
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-
-    if (password !== confirmPassword) {
-      setError("Kata laluan tidak sepadan.");
-      addToast({
-        title: "Gagal",
-        description: "Kata laluan tidak sepadan.",
-        color: "danger",
-      });
-      return;
-    }
-
     setLoading(true);
 
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const data = Object.fromEntries(formData);
+
     try {
-      const res = await fetch("/api/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, username, password }),
+        body: JSON.stringify(data),
       });
 
-      const data = await res.json();
+      const responseData = await res.json();
+      console.log(responseData);
 
       if (!res.ok) {
-        throw new Error(data.message || "Pendaftaran gagal!");
+        addToast({
+          title: "Gagal!",
+          description: "Pendaftaran tidak berjaya: " + responseData?.error,
+          color: "danger",
+        });
+        throw new Error(
+          responseData.error || responseData.message || "Pendaftaran gagal!"
+        );
+      } else {
+        addToast({
+          title: "Berjaya!",
+          description: "Pendaftaran berjaya! Sila log masuk.",
+          color: "success",
+        });
+        // //RESET FORM
+        // (e.currentTarget as HTMLFormElement).reset();
+        // setNationality("Malaysian");
+        // setGender("");
+        setTimeout(() => {
+          router.push("/login");
+        }, 3000);
       }
-
-      addToast({
-        title: "Berjaya",
-        description: "Pendaftaran berjaya! Sila log masuk.",
-        color: "success",
-      });
-      // You can redirect here, e.g., router.push("/login");
     } catch (err: any) {
-      setError(err.message);
-      addToast({
-        title: "Gagal",
-        description: err.message,
-        color: "danger",
-      });
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
+  const isMalaysian = nationality === "Malaysian";
+  const idLabel = isMalaysian ? "NRIC" : "Passport";
+  const idPlaceholder = isMalaysian ? "Masukkan NRIC" : "Masukkan Passport";
+
+  const PasswordVisibilityIcon = ({ isVisible }: { isVisible: boolean }) => (
+    <Icon icon={isVisible ? "oui:eye" : "oui:eye-closed"} />
+  );
+
   return (
     <LoginLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <Card className="p-4 max-w-md">
-          <CardHeader className="flex flex-col">
+        <Card className="p-4 max-w-md w-full bg-transparent backdrop-blur-sm">
+          <CardHeader className="flex flex-col gap-4">
             <Image
               alt="mykasih logo"
-              className="w-full h-15"
+              className="w-full h-15 object-contain"
               radius="none"
               src="https://mykasih.com.my/wp-content/themes/mykasih/images/logo.png"
             />
-            <div className="flex flex-col md:gap-2 items-center">
-              <h2 className={title()}>QuepacsKasih</h2>
+            <div className="flex flex-col items-center text-center">
+              <h2 className={title({ size: "sm" })}>QuepacsKasih</h2>
               <p className="text-small text-default-500">Cipta Akaun Baru</p>
             </div>
           </CardHeader>
+
           <Divider />
-          <CardBody className="flex flex-col items-center justify-center">
-            <Form className="w-full max-w-xs mt-2" onSubmit={handleSubmit}>
+
+          <CardBody>
+            <Form className="w-full space-y-4 mt-2" onSubmit={handleSubmit}>
               <Input
                 isRequired
+                name="fullname"
                 type="text"
-                label="Username"
-                placeholder="Masukkan username"
-                onChange={(e) => setUsername(e.target.value)}
+                label="Nama Penuh"
+                placeholder="Masukkan Nama Penuh"
                 startContent={
                   <Icon icon="mdi:account" className="text-default-400" />
                 }
-                isInvalid={!!error}
+                validate={registerFieldValidator("fullname")}
               />
+
               <Input
                 isRequired
+                name="email"
                 type="email"
                 label="Email"
                 placeholder="Masukkan email"
-                onChange={(e) => setEmail(e.target.value)}
                 startContent={
                   <Icon
                     icon="material-symbols:alternate-email-rounded"
                     className="text-default-400"
                   />
                 }
-                isInvalid={!!error}
+                validate={registerFieldValidator("email")}
               />
+
               <Input
                 isRequired
+                name="password"
                 type={isPasswordVisible ? "text" : "password"}
                 label="Kata Laluan"
                 placeholder="Masukkan kata laluan"
+                value={password}
+                onValueChange={setPassword}
                 startContent={
-                  <Icon
-                    icon="material-symbols:lock"
-                    className="text-default-400"
-                  />
+                  <Icon icon="mdi:lock" className="text-default-400" />
                 }
                 endContent={
                   <button
-                    aria-label="toggle password visibility"
-                    className="focus:outline-solid outline-transparent"
                     type="button"
                     onClick={togglePasswordVisibility}
+                    className="focus:outline-none p-1"
+                    aria-label={
+                      isPasswordVisible
+                        ? "Sembunyikan kata laluan"
+                        : "Tunjukkan kata laluan"
+                    }
                   >
-                    {isPasswordVisible ? (
-                      <Icon icon="oui:eye" />
-                    ) : (
-                      <Icon icon="oui:eye-closed" />
-                    )}
+                    <PasswordVisibilityIcon isVisible={isPasswordVisible} />
                   </button>
                 }
-                onChange={(e) => setPassword(e.target.value)}
-                isInvalid={!!error}
+                validate={registerFieldValidator("password")}
               />
+
               <Input
                 isRequired
+                name="confirmPassword"
                 type={isConfirmPasswordVisible ? "text" : "password"}
                 label="Sahkan Kata Laluan"
                 placeholder="Sahkan kata laluan"
                 startContent={
-                  <Icon
-                    icon="material-symbols:lock-check"
-                    className="text-default-400"
-                  />
+                  <Icon icon="mdi:lock-check" className="text-default-400" />
                 }
                 endContent={
                   <button
-                    aria-label="toggle confirm password visibility"
-                    className="focus:outline-solid outline-transparent"
                     type="button"
                     onClick={toggleConfirmPasswordVisibility}
+                    className="focus:outline-none p-1"
+                    aria-label={
+                      isConfirmPasswordVisible
+                        ? "Sembunyikan kata laluan"
+                        : "Tunjukkan kata laluan"
+                    }
                   >
-                    {isConfirmPasswordVisible ? (
-                      <Icon icon="oui:eye" />
-                    ) : (
-                      <Icon icon="oui:eye-closed" />
-                    )}
+                    <PasswordVisibilityIcon
+                      isVisible={isConfirmPasswordVisible}
+                    />
                   </button>
                 }
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                isInvalid={!!error}
-                errorMessage={error}
+                validate={createConfirmPasswordValidator(password)}
               />
+
+              <Select
+                name="nationality"
+                label="Kewarganegaraan"
+                selectedKeys={[nationality]}
+                onSelectionChange={(keys) =>
+                  setNationality(Array.from(keys)[0] as string)
+                }
+                isRequired
+                validate={registerFieldValidator("nationality")}
+              >
+                {nationalityOptions.map((item) => (
+                  <SelectItem key={item.value} textValue={item.label}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </Select>
+
+              <Input
+                isRequired
+                name="nric"
+                type={isMalaysian ? "number" : "text"}
+                label={idLabel}
+                placeholder={idPlaceholder}
+                startContent={
+                  <Icon
+                    icon="material-symbols:badge"
+                    className="text-default-400"
+                  />
+                }
+                validate={(value) => {
+                  // Custom validation for NRIC/Passport based on nationality
+                  if (isMalaysian) {
+                    return /^[0-9]{6,12}$/.test(value)
+                      ? null
+                      : "Format NRIC tidak sah";
+                  } else {
+                    return /^[a-zA-Z0-9]{6,20}$/.test(value)
+                      ? null
+                      : "Format Passport tidak sah";
+                  }
+                }}
+              />
+
+              <Input
+                isRequired
+                name="phone"
+                type="tel"
+                label="No. Telefon"
+                placeholder="Masukkan No. Telefon"
+                startContent={
+                  <span className="text-sm text-default-500">+6</span>
+                }
+                validate={registerFieldValidator("phone")}
+              />
+
+              <Select
+                name="gender"
+                label="Jantina"
+                placeholder="Pilih jantina"
+                selectedKeys={gender ? [gender] : []}
+                onSelectionChange={(keys) =>
+                  setGender(Array.from(keys)[0] as string)
+                }
+                isRequired
+                validate={registerFieldValidator("gender")}
+              >
+                {genderOptions.map((item) => (
+                  <SelectItem key={item.value} textValue={item.label}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </Select>
+
+              <Input
+                name="referralCode"
+                type="text"
+                label="Kod Rujukan (Pilihan)"
+                placeholder="Masukkan kod rujukan"
+              />
+
               <Button
                 color="primary"
                 className="w-full mt-4"
                 variant="shadow"
                 type="submit"
-                disabled={loading}
+                isLoading={loading}
+                isDisabled={loading}
               >
                 {loading ? "Mendaftar..." : "Daftar"}
               </Button>
             </Form>
           </CardBody>
+
           <Divider />
-          <CardFooter className="flex items-center justify-center gap-1 flex-col">
+
+          <CardFooter className="flex flex-col items-center gap-2">
             <p className="text-small text-default-500">
               Sudah mempunyai akaun?
             </p>
-            <Link className="text-primary text-sm" href="/login">
+            <Link href="/login" className="text-primary text-sm">
               Log masuk di sini
             </Link>
           </CardFooter>

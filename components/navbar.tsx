@@ -25,6 +25,7 @@ import {
   SearchIcon,
   Logo,
 } from "@/components/icons";
+import { Image } from "@heroui/image";
 
 export const Navbar = () => {
   const searchInput = (
@@ -53,8 +54,9 @@ export const Navbar = () => {
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
-            <Logo />
-            <p className="font-bold text-inherit">ACME</p>
+            {/* <Logo /> */}
+            <Image src="https://mykasih.com.my/wp-content/themes/mykasih/images/logo.png" alt="logo" height={30} className="rounded-none mr-2 md:block hidden" />
+            <p className="font-bold text-inherit">QuepacsKasih</p>
           </NextLink>
         </NavbarBrand>
         <div className="hidden lg:flex gap-4 justify-start ml-2">

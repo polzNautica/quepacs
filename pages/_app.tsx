@@ -3,7 +3,7 @@ import type { AppProps } from "next/app";
 import { HeroUIProvider } from "@heroui/system";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ToastProvider } from "@heroui/react";
 
 import { fontSans, fontMono } from "@/config/fonts";
@@ -25,7 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <NextThemesProvider attribute="class" defaultTheme="dark">
-      <HeroUIProvider locale="es-ES" className="{className}" navigate={router.push}>
+      <HeroUIProvider locale="es-ES" navigate={router.push}>
         <div className="fixed inset-x-0 top-0 z-[100] flex justify-center">
           <ToastProvider placement="top-center" toastOffset={60} />
         </div>
