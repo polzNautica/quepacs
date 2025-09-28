@@ -73,6 +73,12 @@ export default async function handler(
     // Hash password with bcrypt (simple and secure)
     const hashedPassword = await bcrypt.hash(password, 12);
 
+    const role = await prisma.role.findFirst({
+      where: {
+        name: "Member",
+      },
+    });
+
     try {
       // Create new user
       const newUser = await prisma.user.create({
@@ -90,6 +96,7 @@ export default async function handler(
           status: "ACTIVE",
           created_at: new Date(),
           updated_at: new Date(),
+          role_id: role.id,
         },
         select: {
           id: true,

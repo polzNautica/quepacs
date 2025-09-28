@@ -13,7 +13,7 @@ export const registerSchema = yup.object({
   confirmPassword: yup.string()
     .required('Kata laluan tidak sepadan'),
   nationality: yup.string().oneOf(['Malaysian','NonMalaysian']).required('Kewarganegaraan diperlukan'),
-  nric: yup.string().required('NRIC/Passport diperlukan'),
+  nric: yup.string().matches(/^[0-9]{12}$/, 'Format NRIC tidak sah').required('NRIC/Passport diperlukan'),
   phone: yup.string().matches(/^[0-9]{9,11}$/, 'Format telefon tidak sah').required('Telefon diperlukan'),
   gender: yup.string().oneOf(['Male', 'Female']).required('Jantina diperlukan'),
   referralCode: yup.string().optional(),
@@ -32,8 +32,7 @@ export const registerFieldValidator = (fieldName: string) => {
 };
 export const createConfirmPasswordValidator = (currentPassword: string) => {
   return (value: string | string[]) => {
-    const stringValue = Array.isArray(value) ? value[0] || '' : value;
-    
+    const stringValue = Array.isArray(value) ? value[0] || '' : value;   
     if (!stringValue) return 'Sahkan kata laluan diperlukan';
     if (stringValue !== currentPassword) return 'Kata laluan tidak sepadan';
     return null;

@@ -22,13 +22,13 @@ hasya was here
 ### Install dependencies
 
 ```bash
-yarn install
+npm install
 ```
 
 ### Run the development server
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 ## License

@@ -21,6 +21,7 @@ import {
   Link,
   Select,
   SelectItem,
+  Checkbox,
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
 
@@ -64,7 +65,7 @@ export default function RegisterPage() {
       });
 
       const responseData = await res.json();
-      console.log(responseData);
+      console.log("RESDATA: ", responseData);
 
       if (!res.ok) {
         addToast({
@@ -90,6 +91,11 @@ export default function RegisterPage() {
         }, 3000);
       }
     } catch (err: any) {
+      // addToast({
+      //   title: "Gagal!",
+      //   description: "Pendaftaran tidak berjaya: Punca tidak diketahui",
+      //   color: "danger",
+      // });
       console.error(err);
     } finally {
       setLoading(false);
@@ -107,7 +113,7 @@ export default function RegisterPage() {
   return (
     <LoginLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <Card className="p-4 max-w-md w-full bg-transparent backdrop-blur-sm">
+        <Card className="p-4 max-w-md w-full backdrop-blur-sm">
           <CardHeader className="flex flex-col gap-4">
             <Image
               alt="mykasih logo"
@@ -228,9 +234,12 @@ export default function RegisterPage() {
               <Input
                 isRequired
                 name="nric"
-                type={isMalaysian ? "number" : "text"}
+                type={isMalaysian ? "text" : "text"}
                 label={idLabel}
                 placeholder={idPlaceholder}
+                inputMode={isMalaysian ? "numeric" : "text"}
+                pattern="^[0-9]{6,12}$"
+                description={<span className="text-xs">NRIC tanpa -</span>}
                 startContent={
                   <Icon
                     icon="material-symbols:badge"
@@ -287,6 +296,16 @@ export default function RegisterPage() {
                 label="Kod Rujukan (Pilihan)"
                 placeholder="Masukkan kod rujukan"
               />
+
+              <Checkbox name="tnc" isRequired>
+                <p className="text-sm text-default-500">
+                  Sila terima{" "}
+                  <Link className="text-sm text-secondary" href="/tnc">
+                    Terma & Syarat
+                  </Link>{" "}
+                  yang ditetapkan.
+                </p>
+              </Checkbox>
 
               <Button
                 color="primary"
