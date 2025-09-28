@@ -1,9 +1,11 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Next.js + HeroUI",
-  description: "Make beautiful websites regardless of your design experience.",
-  navItems: [
+  name: "QuepacsKasih",
+  description: "QuepacsKasih PWA.",
+  
+  // Public navigation items (shown when not logged in)
+  navItemsPublic: [
     {
       label: "Laman Utama",
       href: "/",
@@ -15,42 +17,73 @@ export const siteConfig = {
     {
       label: "Register",
       href: "/register",
-    }
+    },
   ],
-  navMenuItems: [
+
+  // Admin navigation items
+  navItemsAdmin: [
     {
-      label: "Profile",
+      label: "Dashboard Admin",
+      href: "/admin/dashboard",
+    },
+    {
+      label: "Pengurusan Pengguna",
+      href: "/admin/users",
+    },
+    {
+      label: "Laporan",
+      href: "/admin/reports",
+    },
+    {
+      label: "Profil",
       href: "/profile",
     },
     {
-      label: "Dashboard",
-      href: "/dashboard",
-    },
-    // {
-    //   label: "Projects",
-    //   href: "/projects",
-    // },
-    // {
-    //   label: "Team",
-    //   href: "/team",
-    // },
-    // {
-    //   label: "Calendar",
-    //   href: "/calendar",
-    // },
-    // {
-    //   label: "Settings",
-    //   href: "/settings",
-    // },
-    // {
-    //   label: "Help & Feedback",
-    //   href: "/help-feedback",
-    // },
-    {
-      label: "Logout",
+      label: "Log Keluar",
       href: "/logout",
     },
   ],
+
+  // Ahli navigation items
+  navItemsAhli: [
+    {
+      label: "Dashboard Ahli",
+      href: "/ahli/dashboard",
+    },
+    {
+      label: "Profil Saya",
+      href: "/ahli/profile",
+    },
+    {
+      label: "Aktiviti",
+      href: "/ahli/activities",
+    },
+    {
+      label: "Bantuan",
+      href: "/ahli/help",
+    },
+    {
+      label: "Log Keluar",
+      href: "/logout",
+    },
+  ],
+
+  // Agent navigation items (if you have this role)
+  navItemsAgent: [
+    {
+      label: "Dashboard Agent",
+      href: "/agent/dashboard",
+    },
+    {
+      label: "Profil",
+      href: "/agent/profile",
+    },
+    {
+      label: "Log Keluar",
+      href: "/logout",
+    },
+  ],
+
   links: {
     github: "https://github.com/heroui-inc/heroui",
     twitter: "https://twitter.com/hero_ui",
@@ -58,4 +91,4 @@ export const siteConfig = {
     discord: "https://discord.gg/9b6yyZKmH4",
     sponsor: "https://patreon.com/jrgarciadev",
   },
-};
+} as const;

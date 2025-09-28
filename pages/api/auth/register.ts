@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/server/prisma-client";
+import { prisma } from "@/lib/prisma-client";
 import bcrypt from "bcryptjs";
 
 export default async function handler(
@@ -75,9 +75,15 @@ export default async function handler(
 
     const role = await prisma.role.findFirst({
       where: {
-        name: "Member",
+        name: {
+          in: ["User", "Member"],
+        },
       },
     });
+
+    if (!role) {
+      return res.status(500).json({ error: "Gagal mendapatkan maklumat ahli." });
+    }
 
     try {
       // Create new user

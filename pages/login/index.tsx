@@ -2,8 +2,8 @@ import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { title } from "@/components/primitives";
 import { Form } from "@heroui/form";
-import LoginLayout from "@/layouts/login";
-import { useState } from "react";
+import DefaultLayout from "@/layouts/default";
+import { useState, useEffect } from "react";
 import { addToast } from "@heroui/react";
 import {
   Card,
@@ -15,67 +15,97 @@ import {
   Link,
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
+import { useAuthStore } from "@/stores/auth-store";
+import { useRouter } from "next/router";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+
+  const {
+    login,
+    isAuthenticated,
+    getDashboardRoute,
+    initializeAuth,
+    isInitialized,
+  } = useAuthStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
+
+  useEffect(() => {
+    if (isInitialized && isAuthenticated) {
+      router.push(getDashboardRoute());
+    }
+  }, [isAuthenticated, isInitialized, router, getDashboardRoute]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const data = {
+      nric: formData.get("nric") as string,
+      password: formData.get("password") as string,
+    };
 
     try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, username, password }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
+      const res = await login(data); 
+      
+      if (res.success || !res.error) {
+        addToast({
+          title: "Berjaya",
+          description: "Log masuk berjaya!",
+          color: "success",
+        });
+        router.push(getDashboardRoute());
+      }
+      else if (!res.success || res.error) {
         addToast({
           title: "Gagal",
-          description: data.message || "Log masuk gagal!",
+          description: "Log masuk tidak berjaya: " + res.error,
           color: "danger",
         });
-        throw new Error(data.message || "Login failed");
-      }
-
-      addToast({
-        title: "Berjaya",
-        description: "Log masuk berjaya!",
-        color: "success",
-      });
-      // You can redirect here, e.g., router.push("/dashboard");
+        console.error("Login failed:", res.error);
+        return;
+      } 
     } catch (err: any) {
-      setError(err.message);
       addToast({
         title: "Gagal",
-        description: "Log masuk gagal!",
+        description:
+          "Log masuk tidak berjaya: " + (err.message || "Sila cuba lagi"),
         color: "danger",
       });
+      console.error("Login failed:", err);
     } finally {
       setLoading(false);
     }
   };
 
+  if (!isInitialized) {
+    return (
+      <DefaultLayout>
+        <div className="flex justify-center items-center min-h-screen">
+          <Icon icon="eos-icons:loading" className="animate-spin text-4xl" />
+        </div>
+      </DefaultLayout>
+    );
+  }
+
+  // Show login form when initialized and not authenticated
   return (
-    <LoginLayout>
-      <section className="flex flex-col items-center justify-center gap-4 py-2 md:py-2@">
+    <DefaultLayout>
+      <section className="flex flex-col items-center justify-center gap-4 py-2 md:py-2">
         <Card className="p-4 max-w-md">
           <CardHeader className="flex flex-col">
             <Image
               alt="mykasih logo"
               className="w-full h-15"
               radius="none"
-              src="	https://mykasih.com.my/wp-content/themes/mykasih/images/logo.png"
+              src="https://mykasih.com.my/wp-content/themes/mykasih/images/logo.png"
             />
             <div className="flex flex-col md:gap-2 items-center">
               <h2 className={title()}>QuepacsKasih</h2>
@@ -87,23 +117,29 @@ export default function LoginPage() {
             <Form className="w-full max-w-xs mt-2" onSubmit={handleSubmit}>
               <Input
                 isRequired
+                name="nric"
                 type="text"
-                label="Username"
-                placeholder="Masukkan username atau email"
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setUsername(e.target.value);
-                }}
+                label="NRIC/Passport"
+                placeholder="Masukkan NRIC/Passport"
                 startContent={
-                  <Icon icon="material-symbols:alternate-email-rounded" className="text-default-400" />
+                  <Icon
+                    icon="material-symbols:person"
+                    className="text-default-400"
+                  />
                 }
               />
               <Input
                 isRequired
+                name="password"
                 type={isVisible ? "text" : "password"}
                 label="Kata Laluan"
                 placeholder="Masukkan kata laluan"
-                startContent={<Icon icon="material-symbols:lock" className="text-default-400" />}
+                startContent={
+                  <Icon
+                    icon="material-symbols:lock"
+                    className="text-default-400"
+                  />
+                }
                 endContent={
                   <button
                     aria-label="toggle password visibility"
@@ -118,7 +154,6 @@ export default function LoginPage() {
                     )}
                   </button>
                 }
-                onChange={(e) => setPassword(e.target.value)}
               />
               <Link className="text-sm self-end" href="/register">
                 Lupa Kata Laluan?
@@ -129,6 +164,7 @@ export default function LoginPage() {
                 variant="shadow"
                 type="submit"
                 isLoading={loading}
+                isDisabled={loading}
               >
                 Log Masuk
               </Button>
@@ -145,6 +181,6 @@ export default function LoginPage() {
           </CardFooter>
         </Card>
       </section>
-    </LoginLayout>
+    </DefaultLayout>
   );
 }

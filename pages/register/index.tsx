@@ -6,7 +6,7 @@ import {
 } from "@/lib/validationSchemas";
 import { useRouter } from "next/router";
 import { title } from "@/components/primitives";
-import LoginLayout from "@/layouts/login";
+import DefaultLayout from "@/layouts/default";
 import {
   Button,
   Form,
@@ -73,9 +73,7 @@ export default function RegisterPage() {
           description: "Pendaftaran tidak berjaya: " + responseData?.error,
           color: "danger",
         });
-        throw new Error(
-          responseData.error || responseData.message || "Pendaftaran gagal!"
-        );
+        console.error(responseData.error);
       } else {
         addToast({
           title: "Berjaya!",
@@ -111,10 +109,10 @@ export default function RegisterPage() {
   );
 
   return (
-    <LoginLayout>
-      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <Card className="p-4 max-w-md w-full backdrop-blur-sm">
-          <CardHeader className="flex flex-col gap-4">
+    <DefaultLayout>
+      <section className="flex flex-col items-center justify-center gap-4 py-2 md:py-2">
+        <Card className="p-4 max-w-md">
+          <CardHeader className="flex flex-col">
             <Image
               alt="mykasih logo"
               className="w-full h-15 object-contain"
@@ -122,7 +120,7 @@ export default function RegisterPage() {
               src="https://mykasih.com.my/wp-content/themes/mykasih/images/logo.png"
             />
             <div className="flex flex-col items-center text-center">
-              <h2 className={title({ size: "sm" })}>QuepacsKasih</h2>
+              <h2 className={title()}>QuepacsKasih</h2>
               <p className="text-small text-default-500">Cipta Akaun Baru</p>
             </div>
           </CardHeader>
@@ -332,6 +330,6 @@ export default function RegisterPage() {
           </CardFooter>
         </Card>
       </section>
-    </LoginLayout>
+    </DefaultLayout>
   );
 }

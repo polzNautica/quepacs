@@ -1,9 +1,5 @@
-import { Link } from "@heroui/link";
-
 import { Head } from "./head";
-
 import { Navbar } from "@/components/navbar";
-
 import { Divider } from "@heroui/react";
 
 export default function DefaultLayout({
@@ -15,29 +11,13 @@ export default function DefaultLayout({
     <div className="relative flex flex-col h-screen">
       <Head />
       <Navbar />
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
+      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-4">
         {children}
       </main>
-      <Divider />
+      <Divider className="mt-10" />
       <footer className="w-full flex items-center justify-center py-3">
-        <p className="text-xs text-gray-500 text-center">
-          {" "}
-          © 2024-2025 Powered by FK Technology Sdn Bhd (929210-W). All Rights
-          Reserved.
-        </p>
+        <p className="text-xs text-gray-500 text-center"> © 2024-2025 Powered by FK Technology Sdn Bhd (929210-W). All Rights Reserved.</p>
       </footer>
-
-      {/* <footer className="w-full flex items-center justify-center py-3">
-        <Link
-          isExternal
-          className="flex items-center gap-1 text-current"
-          href="https://www.heroui.com"
-          title="heroui.com homepage"
-        >
-          <span className="text-default-600">Powered by</span>
-          <p className="text-primary">HeroUI</p>
-        </Link>
-      </footer> */}
     </div>
   );
 }

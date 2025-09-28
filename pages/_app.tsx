@@ -5,6 +5,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { ToastProvider } from "@heroui/react";
+import Background from "@/components/background";
 
 import { fontSans, fontMono } from "@/config/fonts";
 import "@/styles/globals.css";
@@ -25,7 +26,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <NextThemesProvider attribute="class" defaultTheme="dark">
-      <HeroUIProvider locale="es-ES" navigate={router.push}>
+      <HeroUIProvider navigate={router.push}>
+        <Background />
         <div className="fixed inset-x-0 top-0 z-[100] flex justify-center">
           <ToastProvider placement="top-center" toastOffset={60} />
         </div>

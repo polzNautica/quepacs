@@ -11,14 +11,17 @@ CREATE TABLE `landing_page_content` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `jwt_token` (
+CREATE TABLE `jwt_tokens` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `token` VARCHAR(500) NOT NULL,
     `user_id` INTEGER NOT NULL,
-    `token` TEXT NOT NULL,
-    `expires_at` DATETIME(0) NOT NULL,
-    `created_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `expires_at` DATETIME(3) NOT NULL,
+    `is_revoked` BOOLEAN NOT NULL DEFAULT false,
+    `created_at` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `updated_at` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
 
-    INDEX `user_id`(`user_id`),
+    UNIQUE INDEX `jwt_tokens_token_key`(`token`),
+    INDEX `jwt_tokens_user_id_idx`(`user_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -38,6 +41,7 @@ CREATE TABLE `user` (
     `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
     `created_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
     `updated_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `role_id` INTEGER NOT NULL,
 
     UNIQUE INDEX `email`(`email`),
     UNIQUE INDEX `username`(`username`),
@@ -55,19 +59,17 @@ CREATE TABLE `user_detail` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `user_role` (
-    `user_id` INTEGER NOT NULL,
-    `role_id` INTEGER NOT NULL,
+CREATE TABLE `role` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(191) NULL,
 
-    INDEX `role_id`(`role_id`),
-    PRIMARY KEY (`user_id`, `role_id`)
+    UNIQUE INDEX `role_name_key`(`name`),
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `jwt_token` ADD CONSTRAINT `jwt_token_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE `jwt_tokens` ADD CONSTRAINT `jwt_tokens_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `user_role` ADD CONSTRAINT `user_role_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE `user_role` ADD CONSTRAINT `user_role_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `user_detail`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE `user` ADD CONSTRAINT `user_role_id_fkey` FOREIGN KEY (`role_id`) REFERENCES `role`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
