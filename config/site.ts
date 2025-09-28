@@ -23,48 +23,28 @@ export const siteConfig = {
   // Admin navigation items
   navItemsAdmin: [
     {
-      label: "Dashboard Admin",
+      label: "Dashboard",
       href: "/admin/dashboard",
     },
     {
       label: "Pengurusan Pengguna",
-      href: "/admin/users",
+      href: "#",
     },
     {
       label: "Laporan",
-      href: "/admin/reports",
-    },
-    {
-      label: "Profil",
-      href: "/profile",
-    },
-    {
-      label: "Log Keluar",
-      href: "/logout",
+      href: "/admin/laporan",
     },
   ],
 
   // Ahli navigation items
   navItemsAhli: [
     {
-      label: "Dashboard Ahli",
+      label: "Dashboard",
       href: "/ahli/dashboard",
     },
     {
-      label: "Profil Saya",
-      href: "/ahli/profile",
-    },
-    {
-      label: "Aktiviti",
-      href: "/ahli/activities",
-    },
-    {
-      label: "Bantuan",
-      href: "/ahli/help",
-    },
-    {
-      label: "Log Keluar",
-      href: "/logout",
+      label: "Senarai Subkribsi",
+      href: "#",
     },
   ],
 
@@ -72,11 +52,11 @@ export const siteConfig = {
   navItemsAgent: [
     {
       label: "Dashboard Agent",
-      href: "/agent/dashboard",
+      href: "#",
     },
     {
       label: "Profil",
-      href: "/agent/profile",
+      href: "#",
     },
     {
       label: "Log Keluar",

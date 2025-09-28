@@ -16,6 +16,16 @@ import { link as linkStyles } from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
 import { ThemeSwitch } from "@/components/theme-switch";
+import {
+  DropdownItem,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+  Avatar,
+  User,
+  Divider,
+} from "@heroui/react";
+import { Icon } from "@iconify/react";
 
 export const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuthStore();
@@ -53,54 +63,61 @@ export const Navbar = () => {
             <p className="font-bold text-inherit">{siteConfig.name}</p>
           </NextLink>
         </NavbarBrand>
-        
-        <ul className="hidden lg:flex gap-4 justify-start ml-2">
-          {navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              {item.href === "/logout" ? (
-                <Link
-                  className={clsx(
-                    linkStyles({ color: "foreground" }),
-                    "data-[active=true]:text-primary data-[active=true]:font-medium cursor-pointer"
-                  )}
-                  color="foreground"
-                  onClick={handleLogout}
-                >
-                  {item.label}
-                </Link>
-              ) : (
-                <NextLink
-                  className={clsx(
-                    linkStyles({ color: "foreground" }),
-                    "data-[active=true]:text-primary data-[active=true]:font-medium"
-                  )}
-                  color="foreground"
-                  href={item.href}
-                >
-                  {item.label}
-                </NextLink>
-              )}
-            </NavbarItem>
-          ))}
-        </ul>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex basis-1/5 sm:basis-full" justify="end">
-        <NavbarItem className="hidden sm:flex gap-2">
-          <ThemeSwitch />
-        </NavbarItem>
-        {isAuthenticated && user && (
-          <NavbarItem>
-            <span className="text-small text-default-500">
-              Helo, {user.fullname} ({user.role})
-            </span>
-          </NavbarItem>
-        )}
-      </NavbarContent>
-
-      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
+      <NavbarContent
+        className="!flex-grow-0 h-full gap-4"
+      >
         <ThemeSwitch />
         <NavbarMenuToggle />
+        {isAuthenticated && user && (
+          <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+              <Avatar
+                isBordered
+                as="button"
+                className="transition-transform"
+                color="secondary"
+                size="sm"
+                src="https://i.pravatar.cc/150"
+              />
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Profile Actions">
+              <DropdownItem key="user" textValue="user">
+                <p className="text-xs">
+                  {user?.fullname} ({user?.role})
+                </p>
+                <p className="text-xs text-primary mb-2">{user?.email}</p>
+                <Divider />
+              </DropdownItem>
+              <DropdownItem key="profile" textValue="profile">
+                <Link href="/profile" className="text-foreground text-sm">
+                  <Icon icon="mdi:account" />
+                  <span className="ml-2">Profil</span>
+                </Link>
+              </DropdownItem>
+              <DropdownItem key="settings" textValue="settings">
+                <Link href="/settings" className="text-foreground text-sm">
+                  <Icon icon="mdi:cog" />
+                  <span className="ml-2">Settings</span>
+                </Link>
+              </DropdownItem>
+              <DropdownItem
+                key="logout"
+                textValue="logout"
+                className="text-danger"
+              >
+                <Link
+                  onClick={handleLogout}
+                  className="text-foreground text-sm"
+                >
+                  <Icon icon="mdi:logout" />
+                  <span className="ml-2">Log Keluar</span>
+                </Link>
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        )}
       </NavbarContent>
 
       <NavbarMenu>
@@ -128,13 +145,6 @@ export const Navbar = () => {
               )}
             </NavbarMenuItem>
           ))}
-          {isAuthenticated && user && (
-            <NavbarMenuItem>
-              <span className="text-small text-default-500">
-                Log masuk sebagai: {user.fullname} ({user.role})
-              </span>
-            </NavbarMenuItem>
-          )}
         </div>
       </NavbarMenu>
     </NextUINavbar>

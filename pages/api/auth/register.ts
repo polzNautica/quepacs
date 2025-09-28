@@ -76,7 +76,7 @@ export default async function handler(
     const role = await prisma.role.findFirst({
       where: {
         name: {
-          in: ["User", "Member"],
+          in: ["Ahli", "AHLI"],
         },
       },
     });

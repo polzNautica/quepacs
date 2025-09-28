@@ -3,6 +3,7 @@ import { Navbar } from "@/components/navbar";
 import { Divider } from "@heroui/react";
 import ProtectedRoute from "@/lib/ProtectedRoute";
 import { ROLES } from "@/constants/roles";
+import DynamicBreadcrumbs from "@/components/breadcrumbs";
 
 export default function AhliLayout({
   children,
@@ -15,6 +16,7 @@ export default function AhliLayout({
         <Head />
         <Navbar />
         <main className="container mx-auto max-w-7xl px-6 flex-grow pt-4">
+          <DynamicBreadcrumbs role="ahli" />
           {children}
         </main>
         <Divider className="mt-10" />
