@@ -16,12 +16,13 @@ import { FlatCompat } from "@eslint/eslintrc";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all,
 });
 
-export default defineConfig([globalIgnores([
+export default defineConfig([
+  globalIgnores([
     ".now/*",
     "**/*.css",
     "**/.changeset",
@@ -42,109 +43,174 @@ export default defineConfig([globalIgnores([
     "!**/plopfile.js",
     "!**/react-shim.js",
     "!**/tsup.config.ts",
-]), {
-    extends: fixupConfigRules(compat.extends(
+  ]),
+
+  {
+    extends: fixupConfigRules(
+      compat.extends(
+        "next/core-web-vitals", // Add this for Next.js
         "plugin:react/recommended",
         "plugin:prettier/recommended",
         "plugin:react-hooks/recommended",
-        "plugin:jsx-a11y/recommended",
-    )),
+        "plugin:jsx-a11y/recommended"
+      )
+    ),
 
     plugins: {
-        react: fixupPluginRules(react),
-        "unused-imports": unusedImports,
-        import: fixupPluginRules(_import),
-        "@typescript-eslint": typescriptEslint,
-        "jsx-a11y": fixupPluginRules(jsxA11Y),
-        prettier: fixupPluginRules(prettier),
+      react: fixupPluginRules(react),
+      "unused-imports": unusedImports,
+      import: fixupPluginRules(_import),
+      "@typescript-eslint": typescriptEslint,
+      "jsx-a11y": fixupPluginRules(jsxA11Y),
+      prettier: fixupPluginRules(prettier),
     },
 
     languageOptions: {
-        globals: {
-            ...Object.fromEntries(Object.entries(globals.browser).map(([key]) => [key, "off"])),
-            ...globals.node,
-        },
+      globals: {
+        ...globals.browser, // Fixed: Don't turn off browser globals
+        ...globals.node,
+      },
 
-        parser: tsParser,
-        ecmaVersion: 12,
-        sourceType: "module",
+      parser: tsParser,
+      ecmaVersion: 12,
+      sourceType: "module",
 
-        parserOptions: {
-            ecmaFeatures: {
-                jsx: true,
-            },
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
         },
+        project: "./tsconfig.json", // Add this for TypeScript
+      },
     },
 
     settings: {
-        react: {
-            version: "detect",
+      react: {
+        version: "detect",
+      },
+      "import/resolver": {
+        typescript: {
+          alwaysTryTypes: true,
         },
+      },
     },
 
     files: ["**/*.ts", "**/*.tsx"],
 
     rules: {
-        "no-console": "off",
-        "react/prop-types": "off",
-        "react/jsx-uses-react": "off",
-        "react/react-in-jsx-scope": "off",
-        "react-hooks/exhaustive-deps": "off",
-        "jsx-a11y/click-events-have-key-events": "warn",
-        "jsx-a11y/interactive-supports-focus": "warn",
-        "prettier/prettier": "off",
-        "no-unused-vars": "off",
-        "unused-imports/no-unused-vars": "off",
-        "unused-imports/no-unused-imports": "warn",
+      // Console - warn in development
+      "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
 
-        "@typescript-eslint/no-unused-vars": ["off", {
-            args: "after-used",
-            ignoreRestSiblings: false,
-            argsIgnorePattern: "^_.*?$",
-        }],
+      // React
+      "react/prop-types": "off", // Not needed with TypeScript
+      "react/jsx-uses-react": "off",
+      "react/react-in-jsx-scope": "off",
+      "react-hooks/exhaustive-deps": "warn", // Changed from off to warn
+      "react/self-closing-comp": "warn",
 
-        "import/order": ["off", {
-            groups: [
-                "type",
-                "builtin",
-                "object",
-                "external",
-                "internal",
-                "parent",
-                "sibling",
-                "index",
-            ],
+      // Accessibility
+      "jsx-a11y/click-events-have-key-events": "warn",
+      "jsx-a11y/interactive-supports-focus": "warn",
 
-            pathGroups: [{
-                pattern: "~/**",
-                group: "external",
-                position: "after",
-            }],
+      // Prettier
+      "prettier/prettier": "warn", // Changed from off to warn
 
-            "newlines-between": "always",
-        }],
+      // Unused imports and variables
+      "no-unused-vars": "off", // Use TypeScript version instead
+      "unused-imports/no-unused-vars": "off",
+      "unused-imports/no-unused-imports": "warn",
 
-        "react/self-closing-comp": "warn",
+      "@typescript-eslint/no-unused-vars": [
+        "warn", // Changed from off to warn
+        {
+          args: "after-used",
+          ignoreRestSiblings: true,
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+        },
+      ],
 
-        "react/jsx-sort-props": ["off", {
-            callbacksLast: true,
-            shorthandFirst: true,
-            noSortAlphabetically: false,
-            reservedFirst: true,
-        }],
+      // Import order
+      "import/order": [
+        "warn", // Changed from off to warn
+        {
+          groups: [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+            "object",
+            "type",
+          ],
+          pathGroups: [
+            {
+              pattern: "react",
+              group: "external",
+              position: "before",
+            },
+            {
+              pattern: "@/**",
+              group: "internal",
+              position: "after",
+            },
+          ],
+          pathGroupsExcludedImportTypes: ["react"],
+          "newlines-between": "always",
+          alphabetize: {
+            order: "asc",
+            caseInsensitive: true,
+          },
+        },
+      ],
 
-        "padding-line-between-statements": ["off", {
-            blankLine: "always",
-            prev: "*",
-            next: "return",
-        }, {
-            blankLine: "always",
-            prev: ["const", "let", "var"],
-            next: "*",
-        }, {
-            blankLine: "any",
-            prev: ["const", "let", "var"],
-            next: ["const", "let", "var"],
-        }],
+      // React props sorting
+      "react/jsx-sort-props": [
+        "off", // Keep off as it's often too strict
+        {
+          callbacksLast: true,
+          shorthandFirst: true,
+          noSortAlphabetically: false,
+          reservedFirst: true,
+        },
+      ],
+
+      // Padding lines
+      "padding-line-between-statements": [
+        "off", // Keep off as prettier usually handles this
+        {
+          blankLine: "always",
+          prev: "*",
+          next: "return",
+        },
+        {
+          blankLine: "always",
+          prev: ["const", "let", "var"],
+          next: "*",
+        },
+        {
+          blankLine: "any",
+          prev: ["const", "let", "var"],
+          next: ["const", "let", "var"],
+        },
+      ],
+
+      // Additional helpful rules
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "@typescript-eslint/prefer-const": "warn",
+
+      // Next.js specific
+      "@next/next/no-html-link-for-pages": "warn",
+      "@next/next/no-img-element": "warn",
     },
-}]);
+  },
+
+  // Separate config for specific files
+  {
+    files: ["**/*.js", "**/*.jsx"],
+    rules: {
+      "@typescript-eslint/no-var-requires": "off",
+    },
+  },
+]);
