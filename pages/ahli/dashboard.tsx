@@ -20,16 +20,16 @@ export default function DashboardAhli() {
   const { user, logout } = useAuthStore();
   const setLoading = useLoadingStore((state) => state.setLoading);
 
-  useEffect(() => {
-    setLoading(true);
-    if (document.readyState === "complete") {
-      setLoading(false);
-    } else {
-      const handleLoad = () => setLoading(false);
-      window.addEventListener("load", handleLoad);
-      return () => window.removeEventListener("load", handleLoad);
-    }
-  }, [setLoading]);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   if (document.readyState === "complete") {
+  //     setLoading(false);
+  //   } else {
+  //     const handleLoad = () => setLoading(false);
+  //     window.addEventListener("load", handleLoad);
+  //     return () => window.removeEventListener("load", handleLoad);
+  //   }
+  // }, [setLoading]);
 
   return (
     <AhliLayout>

@@ -3,16 +3,19 @@ import type { AppProps } from "next/app";
 import { HeroUIProvider } from "@heroui/system";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ToastProvider } from "@heroui/react";
 import Background from "@/components/background";
 import PageSpinner from "@/components/page-spinner";
+import { useLoadingStore } from "@/lib/useLoadingStore";
 
 import { fontSans, fontMono } from "@/config/fonts";
 import "@/styles/globals.css";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
+
+  const setLoading = useLoadingStore((state) => state.setLoading);
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {
@@ -24,6 +27,17 @@ export default function App({ Component, pageProps }: AppProps) {
         );
     }
   }, []);
+
+    useEffect(() => {
+    setLoading(true);
+    if (document.readyState === "complete") {
+      setLoading(false);
+    } else {
+      const handleLoad = () => setLoading(false);
+      window.addEventListener("load", handleLoad);
+      return () => window.removeEventListener("load", handleLoad);
+    }
+  }, [setLoading]);
 
   return (
     <NextThemesProvider attribute="class" defaultTheme="dark">

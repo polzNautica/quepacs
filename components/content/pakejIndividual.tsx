@@ -67,7 +67,7 @@ export default function PakejFamily() {
       ))}  
       </div>
 
-      <Modal isOpen={isOpen} placement={"center"} onOpenChange={onOpenChange}>
+      <Modal isOpen={isOpen} placement={"center"} onOpenChange={onOpenChange} size={"4xl"}>
         <ModalContent>
           {(onClose) => (
             <>
