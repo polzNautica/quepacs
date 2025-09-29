@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { ToastProvider } from "@heroui/react";
 import Background from "@/components/background";
+import PageSpinner from "@/components/page-spinner";
 
 import { fontSans, fontMono } from "@/config/fonts";
 import "@/styles/globals.css";
@@ -28,6 +29,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <NextThemesProvider attribute="class" defaultTheme="dark">
       <HeroUIProvider navigate={router.push}>
         <Background />
+        <PageSpinner />
         <div className="fixed inset-x-0 top-0 z-[100] flex justify-center">
           <ToastProvider placement="top-center" toastOffset={60} />
         </div>

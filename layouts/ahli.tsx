@@ -12,7 +12,7 @@ export default function AhliLayout({
 }) {
   return (
     <ProtectedRoute allowedRoles={[ROLES.AHLI]}>
-      <div className="relative flex flex-col h-screen">
+      <div className="relative flex flex-col h-screen w-full">
         <Head />
         <Navbar />
         <main className="container mx-auto max-w-7xl px-6 flex-grow pt-4">
