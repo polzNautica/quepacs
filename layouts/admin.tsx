@@ -7,8 +7,10 @@ import DynamicBreadcrumbs from "@/components/breadcrumbs";
 
 export default function AdminLayout({
   children,
+  breadcrumbLabel,
 }: {
   children: React.ReactNode;
+  breadcrumbLabel?: string;
 }) {
   return (
     <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
@@ -16,7 +18,7 @@ export default function AdminLayout({
         <Head />
         <Navbar />
         <main className="container mx-auto max-w-7xl px-6 flex-grow pt-4">
-          <DynamicBreadcrumbs role="admin" />
+          <DynamicBreadcrumbs role="admin" breadcrumbLabel={breadcrumbLabel} />
           {children}
         </main>
         <Divider className="mt-10" />

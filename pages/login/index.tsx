@@ -17,11 +17,12 @@ import {
 import { Icon } from "@iconify/react";
 import { useAuthStore } from "@/stores/auth-store";
 import { useRouter } from "next/router";
+import { useLoadingStore } from "@/lib/useLoadingStore";
 
 export default function LoginPage() {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
-  const [loading, setLoading] = useState(false);
+  const {loading, setLoading} = useLoadingStore();
 
   const {
     login,
@@ -86,20 +87,18 @@ export default function LoginPage() {
   };
 
   if (!isInitialized) {
+    setLoading(true);
     return (
       <DefaultLayout>
-        <div className="flex justify-center items-center min-h-screen">
-          <Icon icon="eos-icons:loading" className="animate-spin text-4xl" />
-        </div>
+        <></>
       </DefaultLayout>
     );
   }
 
-  // Show login form when initialized and not authenticated
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-2 md:py-2">
-        <Card className="p-4 max-w-md">
+        <Card className="p-4 max-w-md overflow-hidden">
           <CardHeader className="flex flex-col">
             <Image
               alt="mykasih logo"
@@ -113,7 +112,7 @@ export default function LoginPage() {
             </div>
           </CardHeader>
           <Divider />
-          <CardBody className="flex flex-col items-center justify-center">
+          <CardBody className="flex flex-col items-center justify-center overflow-hidden">
             <Form className="w-full max-w-xs mt-2" onSubmit={handleSubmit}>
               <Input
                 isRequired
@@ -171,7 +170,7 @@ export default function LoginPage() {
             </Form>
           </CardBody>
           <Divider />
-          <CardFooter className="flex items-center justify-center gap-1 flex-col">
+          <CardFooter className="flex items-center justify-center gap-1 flex-col overflow-hidden">
             <p className="text-small text-default-500">
               Belum mempunyai akaun?
             </p>

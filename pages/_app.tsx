@@ -8,14 +8,15 @@ import { ToastProvider } from "@heroui/react";
 import Background from "@/components/background";
 import PageSpinner from "@/components/page-spinner";
 import { useLoadingStore } from "@/lib/useLoadingStore";
-
 import { fontSans, fontMono } from "@/config/fonts";
 import "@/styles/globals.css";
+import { useAuthStore } from "@/stores/auth-store";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   const setLoading = useLoadingStore((state) => state.setLoading);
+  const initializeAuth = useAuthStore((state) => state.initializeAuth);
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {
@@ -28,7 +29,11 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
+
+  useEffect(() => {
     setLoading(true);
     if (document.readyState === "complete") {
       setLoading(false);

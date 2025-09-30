@@ -24,6 +24,7 @@ import {
   Checkbox,
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
+import { useLoadingStore } from "@/lib/useLoadingStore";
 
 export const nationalityOptions = [
   { value: "Malaysian", label: "Warganegara" },
@@ -37,10 +38,10 @@ export const genderOptions = [
 
 export default function RegisterPage() {
   const router = useRouter();
+  const {setLoading, loading} = useLoadingStore();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
-  const [loading, setLoading] = useState(false);
   const [nationality, setNationality] = useState("Malaysian");
   const [gender, setGender] = useState("");
   const [password, setPassword] = useState("");

@@ -28,7 +28,7 @@ export const siteConfig = {
     },
     {
       label: "Pengurusan Pengguna",
-      href: "#",
+      href: "/admin/pengurusanpengguna",
     },
     {
       label: "Laporan",
@@ -44,7 +44,7 @@ export const siteConfig = {
     },
     {
       label: "Senarai Subkribsi",
-      href: "#",
+      href: "/ahli/subkribsi",
     },
   ],
 
@@ -52,11 +52,11 @@ export const siteConfig = {
   navItemsAgent: [
     {
       label: "Dashboard Agent",
-      href: "#",
+      href: "/agent/dashboard",
     },
     {
       label: "Profil",
-      href: "#",
+      href: "/agent/profil",
     },
     {
       label: "Log Keluar",

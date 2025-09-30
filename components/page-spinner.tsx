@@ -18,7 +18,7 @@ export default function PageSpinner() {
 
       const timeout = setTimeout(() => {
         setLoading(false);
-        window.alert("Loading took too long and was stopped.");
+        window.alert("Gagal memuat halaman. Jika anda merasakan ini satu kesilapan, sila hubungi admin.");
       }, 30000);
 
       return () => {

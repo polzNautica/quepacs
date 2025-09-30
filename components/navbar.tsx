@@ -1,4 +1,3 @@
-// components/navbar.tsx
 import { useAuthStore } from "@/stores/auth-store";
 import { siteConfig } from "@/config/site";
 import { ROLES } from "@/constants/roles";
@@ -132,7 +131,6 @@ export const Navbar = () => {
                   href="/login" 
                   className={clsx(
                     "text-sm gap-2 flex items-center",
-                    isLinkActive('/login') ? "text-primary" : "text-primary hover:text-foreground"
                   )}
                 >
                   <span>Log Masuk</span>
@@ -143,16 +141,14 @@ export const Navbar = () => {
                 variant="shadow" 
                 color="primary" 
                 className={clsx(
-                  "rounded-full",
-                  isLinkActive('/register') && "bg-primary/20"
+                  "rounded-full"
                 )}
                 size="sm"
               >
                 <NextLink 
                   href="/register" 
                   className={clsx(
-                    "text-sm gap-2 flex items-center",
-                    isLinkActive('/register') ? "text-foreground" : "text-foreground"
+                    "text-sm gap-2 flex items-center"
                   )}
                 >
                   <span>Daftar Sekarang</span>

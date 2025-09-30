@@ -5,40 +5,48 @@ import { Icon } from "@iconify/react";
 export default function PakejFamily() {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [link, setLink] = useState("");
+  const [isLoading, setLoading] = useState(false);
   const pakej = [
   {
-    title: "Mutiara 1",
-    price: "RM 50",
+    title: "Mutiara Kasih",
+    price: "RM 150",
     subscription: "Setahun",
     link: "https://www.mykasihjenazah.com/daftarp.php?p=2", 
     detailLink: "https://www.mykasihjenazah.com/assets/images/1MK.png"
   },
   {
-    title: "Zamrud 1",
-    price: "RM 80",
+    title: "Intan Kasih",
+    price: "RM 250",
     subscription: "Setahun",
     link: "https://www.mykasihjenazah.com/daftarp.php?p=2",
     detailLink: "https://www.mykasihjenazah.com/assets/images/2ZK.png"
   },
   {
-    title: "Intan 1",
-    price: "RM 100",
+    title: "Zamrud Kasih",
+    price: "RM 200",
     subscription: "Setahun",
     link: "https://www.mykasihjenazah.com/daftarp.php?p=2",
     detailLink: "https://www.mykasihjenazah.com/assets/images/3IK.png"
   },
   {
-    title: "Berlian 1",
-    price: "RM 120",
+    title: "Berlian Kasih",
+    price: "RM 300",
     subscription: "Setahun",
     link: "https://www.mykasihjenazah.com/daftarp.php?p=2",
     detailLink: "https://www.mykasihjenazah.com/assets/images/4BK.png"
+  },
+  {
+    title: "Pelan Sakinah",
+    price: "RM 1,500",
+    subscription: "Seumur Hidup",
+    link: "https://www.mykasihjenazah.com/assets/images/4BK.png",
+    detailLink: ""
   },
 ];
   
   return (
     <>
-    <div className="flex items-center gap-2 grid lg:grid-cols-4 grid-cols-2">
+    <div className="items-center gap-2 grid lg:grid-cols-4 grid-cols-2">
       {pakej.map((item) => (
         <Card className={`w-full dark:bg-default-100/50 p-2 shadow-sm h-full border-1 border-default-200 overflow-hidden ${
           item.title === "Zamrud Kasih" ? "col-span-2" : ""
@@ -51,20 +59,20 @@ export default function PakejFamily() {
             <h1 className="font-bold">{item.price}</h1>
             <p className="text-xs mb-2">{item.subscription}</p>
             <Link isExternal href={item.link}>
-              <Button variant="shadow" color="primary" size="sm">Sertai Sekarang</Button>
+              <Button variant="shadow" color="secondary" size="sm">Sertai Sekarang</Button>
             </Link>
           </CardBody>
           <CardFooter className="p-0 flex items-center justify-center overflow-hidden">
             <Link className={item.detailLink === "" ? "hidden" : "max-w-fit cursor-pointer text-xs text-foreground"} onPress={onOpen}>
-              <Chip size="sm" radius="sm" variant="faded" endContent={<Icon icon="material-symbols:arrow-right-alt-rounded" />} 
+              <Chip size="sm" radius="sm" variant="bordered" endContent={<Icon icon="material-symbols:arrow-right-alt-rounded" />} 
               onClick={() => setLink(item.detailLink)}>
                 Lihat Perincian
               </Chip>
             </Link>
           </CardFooter>
-          <Icon icon="line-md:star-twotone" className={`absolute top-1 right-1 text-warning shadow-sm shadow-warning bg-warning rounded-full text-white animate-pulse ${item.title === "Zamrud 1" ? "block" : "hidden"}`}/>
+            <Icon icon="line-md:star-twotone" className={`absolute top-1 right-1 shadow-sm shadow-warning bg-warning rounded-full text-white animate-pulse ${item.title === "Zamrud Kasih" ? "block" : "hidden"}`}/>
         </Card>
-      ))}  
+      ))}
       </div>
 
       <Modal isOpen={isOpen} placement={"center"} onOpenChange={onOpenChange} size={"4xl"}>

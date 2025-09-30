@@ -8,28 +8,73 @@ import {
   Code,
   Divider,
   Link,
-  Tabs, Tab
+  Tabs,
+  Tab,
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
-import PakejFamily from "@/components/content/pakejFamily";
-import PakejIndividual from "@/components/content/pakejIndividual";
+import PakejFamily from "@/components/content/pakej/pakejFamily";
+import PakejIndividual from "@/components/content/pakej/pakejIndividual";
 import { useLoadingStore } from "@/lib/useLoadingStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { PwaModal } from "@/components/PwaModal";
+import { useDisclosure } from "@heroui/react";
 
 export default function DashboardAhli() {
   const { user, logout } = useAuthStore();
   const setLoading = useLoadingStore((state) => state.setLoading);
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [prompt, setPrompt] = useState<any>(null);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   if (document.readyState === "complete") {
-  //     setLoading(false);
-  //   } else {
-  //     const handleLoad = () => setLoading(false);
-  //     window.addEventListener("load", handleLoad);
-  //     return () => window.removeEventListener("load", handleLoad);
-  //   }
-  // }, [setLoading]);
+  useEffect(() => {
+    setLoading(true);
+    if (document.readyState === "complete") {
+      setLoading(false);
+    } else {
+      const handleLoad = () => setLoading(false);
+      window.addEventListener("load", handleLoad);
+      return () => window.removeEventListener("load", handleLoad);
+    }
+  }, [setLoading]);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (event: any) => {
+      event.preventDefault();
+      setPrompt(event);
+
+      const isStandalone =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        (window.navigator as any).standalone === true;
+
+      if (!isStandalone) {
+        onOpen();
+      }
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (prompt) {
+      prompt.prompt();
+
+      prompt.userChoice.then((choiceResult: any) => {
+        if (choiceResult.outcome === "accepted") {
+          console.log("User accepted the A2HS prompt");
+        } else {
+          console.log("User dismissed the A2HS prompt");
+        }
+        setPrompt(null);
+        onClose();
+      });
+    }
+  };
 
   return (
     <AhliLayout>
@@ -68,34 +113,38 @@ export default function DashboardAhli() {
         </Link>
       </div>
 
-      <Tabs aria-label="Options" color="primary" variant="bordered" className="mb-2 w-full" fullWidth>
+      <Tabs
+        aria-label="Options"
+        color="primary"
+        variant="bordered"
+        className="mb-2 w-full"
+        fullWidth
+      >
         <Tab
-          key="family"
+          key="Pakej Family"
           title={
-            <div className="flex items-center space-x-2">
-              Pakej Keluarga
-            </div>
+            <div className="flex items-center space-x-2">Pakej Keluarga</div>
           }
         >
           <PakejFamily />
         </Tab>
         <Tab
-          key="individual"
+          key="Pakej Individu"
           title={
-            <div className="flex items-center space-x-2">
-              Pakej Individu
-            </div>
+            <div className="flex items-center space-x-2">Pakej Individu</div>
           }
         >
           <PakejIndividual />
         </Tab>
       </Tabs>
-
-
-
-
-
-      
+      <Button onPress={onOpen} color="primary">
+        Show PWA Modal
+      </Button>
+      <PwaModal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        onInstall={handleInstallClick}
+      />
     </AhliLayout>
   );
 }
