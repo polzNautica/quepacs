@@ -17,37 +17,39 @@ model landing_page_content {
 }
 
 model jwt_token {
-  id           Int      @id @default(autoincrement())
-  token        String   @unique @db.VarChar(500)
-  user_id      Int
-  user         user     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  expires_at   DateTime
-  is_revoked   Boolean  @default(false)
-  created_at   DateTime @default(now()) @db.Timestamp(0)
-  updated_at   DateTime @default(now()) @db.Timestamp(0)
+  id         Int      @id @default(autoincrement())
+  token      String   @unique @db.VarChar(500)
+  user_id    Int
+  user       user     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  expires_at DateTime
+  is_revoked Boolean  @default(false)
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @default(now()) @db.Timestamp(0)
 
   @@index([user_id])
   @@map("jwt_tokens")
 }
 
 model user {
-  id             Int         @id @default(autoincrement())
-  email          String      @unique(map: "email") @db.VarChar(255)
-  username       String?     @unique(map: "username") @db.VarChar(100)
-  password_hash  String      @db.VarChar(255)
-  fullname       String      @db.VarChar(255)
-  nationality    String      @db.VarChar(50)
-  nric           String      @unique(map: "nric") @db.VarChar(20)
-  phone          String      @db.VarChar(15)
-  gender         String      @db.VarChar(10)
-  referral_code  String?     @db.VarChar(50)
-  email_verified DateTime?
-  status         String      @default("ACTIVE") @db.VarChar(20)
-  created_at     DateTime?   @default(now()) @db.Timestamp(0)
-  updated_at     DateTime?   @default(now()) @db.Timestamp(0)
-  jwt_token      jwt_token[]
-  role_id        Int
-  role           role        @relation(fields: [role_id], references: [id])
+  id               Int                @id @default(autoincrement())
+  email            String             @unique(map: "email") @db.VarChar(255)
+  username         String?            @unique(map: "username") @db.VarChar(100)
+  password_hash    String             @db.VarChar(255)
+  fullname         String             @db.VarChar(255)
+  nationality      String             @db.VarChar(50)
+  nric             String             @unique(map: "nric") @db.VarChar(20)
+  phone            String             @db.VarChar(15)
+  gender           String             @db.VarChar(10)
+  referral_code    String?            @db.VarChar(50)
+  email_verified   DateTime?
+  status           String             @default("ACTIVE") @db.VarChar(20)
+  created_at       DateTime?          @default(now()) @db.Timestamp(0)
+  updated_at       DateTime?          @default(now()) @db.Timestamp(0)
+  jwt_token        jwt_token[]
+  role_id          Int
+  role             role               @relation(fields: [role_id], references: [id])
+  PushSubscription PushSubscription[]
+  Notification     Notification[]
 }
 
 model user_detail {
@@ -60,4 +62,33 @@ model role {
   name        String  @unique
   description String?
   users       user[]
+}
+
+model PushSubscription {
+  id        Int      @id @default(autoincrement())
+  endpoint  String   @unique @db.VarChar(500)
+  keys      Json
+  userId    Int
+  userAgent String?  @db.VarChar(255)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
+
+  user user @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("push_subscriptions")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  title     String
+  body      String
+  data      Json?
+  userId    Int?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user user? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId]) // Index for fast retrieval of user notifications
+  @@map("notifications") // Good practice to explicitly name table
 }
