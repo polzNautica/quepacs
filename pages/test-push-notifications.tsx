@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 import { useAuthStore } from "@/stores/auth-store";
 import { Button } from "@heroui/react";
+import DefaultLayout from "@/layouts/default";
 
 export default function PushNotificationTest() {
   const { isSupported, permission, subscribe, unsubscribe, isSubscribed } =
@@ -176,158 +177,160 @@ export default function PushNotificationTest() {
   }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Push Notification Test</h1>
+    <DefaultLayout>
+      <div className="p-8 max-w-4xl mx-auto">
+        <h1 className="text-2xl font-bold mb-6">Push Notification Test</h1>
 
-      {/* System Status */}
-      <div className="bg-gray-100 p-4 rounded-lg mb-6">
-        <h2 className="text-lg font-semibold mb-2">System Status</h2>
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            Push Support:{" "}
-            <span className={isSupported ? "text-green-600" : "text-red-600"}>
-              {isSupported ? "✅ Available" : "❌ Not Supported"}
-            </span>
-          </div>
-          <div>
-            Permission:{" "}
-            <span
-              className={
-                permission === "granted"
-                  ? "text-green-600"
-                  : permission === "denied"
-                    ? "text-red-600"
-                    : "text-yellow-600"
-              }
-            >
-              {permission}
-            </span>
-          </div>
-          <div>
-            Subscription:{" "}
-            <span className={isSubscribed ? "text-green-600" : "text-red-600"}>
-              {isSubscribed ? "✅ Subscribed" : "❌ Not Subscribed"}
-            </span>
-          </div>
-          <div>
-            User: <span className="text-blue-600">{user?.email}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Actions */}
-      <div className="space-y-4 mb-6">
-        {!isSubscribed ? (
-          <Button
-            onPress={handleSubscribe}
-            disabled={isLoading || !isSupported || permission === "denied"}
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
-            {isLoading ? "Subscribing..." : "Subscribe to Push Notifications"}
-          </Button>
-        ) : (
-          <Button
-            onPress={handleUnsubscribe}
-            disabled={isLoading}
-            className="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
-            {isLoading
-              ? "Unsubscribing..."
-              : "Unsubscribe from Push Notifications"}
-          </Button>
-        )}
-
-        {isSubscribed && (
-          <Button
-            onPress={sendTestNotification}
-            disabled={isLoading}
-            className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
-            {isLoading ? "Sending..." : "Send Test Notification"}
-          </Button>
-        )}
-
-        <Button
-          onPress={checkBrowserSubscription}
-          className="w-full bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
-        >
-          Check Browser Subscription
-        </Button>
-
-        <Button
-          onPress={checkSubscriptions}
-          className="w-full bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-600"
-        >
-          Refresh Debug Info
-        </Button>
-
-        <Button
-          onPress={sendDetailedTestNotification}
-          className="w-full bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-600"
-        >
-          Send Detailed Test Notification
-        </Button>
-        
-      </div>
-
-      {/* Test Results */}
-      {testResult && (
-        <div
-          className={`mt-4 p-4 rounded whitespace-pre-line ${
-            testResult.includes("✅")
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {testResult}
-        </div>
-      )}
-
-      {/* Debug Information */}
-      {debugInfo && (
-        <div className="mt-6 bg-blue-50 p-4 rounded-lg">
-          <h3 className="font-semibold mb-2">Debug Information</h3>
-          <div className="text-sm">
+        {/* System Status */}
+        <div className="bg-gray-100 p-4 rounded-lg mb-6">
+          <h2 className="text-lg font-semibold mb-2">System Status</h2>
+          <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              Total Subscriptions in DB:{" "}
-              <strong>{debugInfo.totalSubscriptions}</strong>
+              Push Support:{" "}
+              <span className={isSupported ? "text-green-600" : "text-red-600"}>
+                {isSupported ? "✅ Available" : "❌ Not Supported"}
+              </span>
             </div>
-            {debugInfo.subscriptions.length > 0 && (
-              <div className="mt-2">
-                <h4 className="font-medium">Active Subscriptions:</h4>
-                <ul className="list-disc list-inside mt-1">
-                  {debugInfo.subscriptions.map((sub: any) => (
-                    <li key={sub.id}>
-                      User: {sub.userEmail} (ID: {sub.userId})
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            <div>
+              Permission:{" "}
+              <span
+                className={
+                  permission === "granted"
+                    ? "text-green-600"
+                    : permission === "denied"
+                      ? "text-red-600"
+                      : "text-yellow-600"
+                }
+              >
+                {permission}
+              </span>
+            </div>
+            <div>
+              Subscription:{" "}
+              <span className={isSubscribed ? "text-green-600" : "text-red-600"}>
+                {isSubscribed ? "✅ Subscribed" : "❌ Not Subscribed"}
+              </span>
+            </div>
+            <div>
+              User: <span className="text-blue-600">{user?.fullname}</span>
+            </div>
           </div>
         </div>
-      )}
 
-      {/* Common Issues */}
-      <div className="mt-6 bg-yellow-50 p-4 rounded-lg">
-        <h3 className="font-semibold mb-2">Common Issues & Solutions:</h3>
-        <ul className="list-disc list-inside text-sm space-y-1">
-          <li>
-            <strong>No subscriptions found:</strong> Click "Subscribe" first
-          </li>
-          <li>
-            <strong>Permission denied:</strong> Allow notifications in browser
-            settings
-          </li>
-          <li>
-            <strong>Not supported:</strong> Use Chrome/Firefox and ensure HTTPS
-          </li>
-          <li>
-            <strong>Sent: 0:</strong> No active subscriptions for the current
-            user
-          </li>
-        </ul>
+        {/* Actions */}
+        <div className="space-y-4 mb-6">
+          {!isSubscribed ? (
+            <Button
+              onPress={handleSubscribe}
+              disabled={isLoading || !isSupported || permission === "denied"}
+              className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              {isLoading ? "Subscribing..." : "Subscribe to Push Notifications"}
+            </Button>
+          ) : (
+            <Button
+              onPress={handleUnsubscribe}
+              disabled={isLoading}
+              className="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              {isLoading
+                ? "Unsubscribing..."
+                : "Unsubscribe from Push Notifications"}
+            </Button>
+          )}
+
+          {isSubscribed && (
+            <Button
+              onPress={sendTestNotification}
+              disabled={isLoading}
+              className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              {isLoading ? "Sending..." : "Send Test Notification"}
+            </Button>
+          )}
+
+          <Button
+            onPress={checkBrowserSubscription}
+            className="w-full bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
+          >
+            Check Browser Subscription
+          </Button>
+
+          <Button
+            onPress={checkSubscriptions}
+            className="w-full bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-600"
+          >
+            Refresh Debug Info
+          </Button>
+
+          <Button
+            onPress={sendDetailedTestNotification}
+            className="w-full bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-600"
+          >
+            Send Detailed Test Notification
+          </Button>
+          
+        </div>
+
+        {/* Test Results */}
+        {testResult && (
+          <div
+            className={`mt-4 p-4 rounded whitespace-pre-line ${
+              testResult.includes("✅")
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
+            }`}
+          >
+            {testResult}
+          </div>
+        )}
+
+        {/* Debug Information */}
+        {debugInfo && (
+          <div className="mt-6 bg-blue-50 p-4 rounded-lg">
+            <h3 className="font-semibold mb-2">Debug Information</h3>
+            <div className="text-sm">
+              <div>
+                Total Subscriptions in DB:{" "}
+                <strong>{debugInfo.totalSubscriptions}</strong>
+              </div>
+              {debugInfo.subscriptions.length > 0 && (
+                <div className="mt-2">
+                  <h4 className="font-medium">Active Subscriptions:</h4>
+                  <ul className="list-disc list-inside mt-1">
+                    {debugInfo.subscriptions.map((sub: any) => (
+                      <li key={sub.id}>
+                        User: {sub.userEmail} (ID: {sub.userId})
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Common Issues */}
+        <div className="mt-6 bg-yellow-50 p-4 rounded-lg">
+          <h3 className="font-semibold mb-2">Common Issues & Solutions:</h3>
+          <ul className="list-disc list-inside text-sm space-y-1">
+            <li>
+              <strong>No subscriptions found:</strong> Click "Subscribe" first
+            </li>
+            <li>
+              <strong>Permission denied:</strong> Allow notifications in browser
+              settings
+            </li>
+            <li>
+              <strong>Not supported:</strong> Use Chrome/Firefox and ensure HTTPS
+            </li>
+            <li>
+              <strong>Sent: 0:</strong> No active subscriptions for the current
+              user
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-  );
+    </DefaultLayout>
+  );  
 }

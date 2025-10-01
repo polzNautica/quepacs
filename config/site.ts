@@ -46,6 +46,10 @@ export const siteConfig = {
       label: "Senarai Subkribsi",
       href: "/ahli/subkribsi",
     },
+    {
+      label: "Notifikasi Testing",
+      href: "/test-push-notifications",
+    },
   ],
 
   // Agent navigation items (if you have this role)
