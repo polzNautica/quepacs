@@ -18,6 +18,7 @@ import { useLoadingStore } from "@/lib/useLoadingStore";
 import { useEffect, useState } from "react";
 import { PwaModal } from "@/components/PwaModal";
 import { useDisclosure } from "@heroui/react";
+import ActionCard from "@/components/heroui/action-card";
 
 export default function DashboardAhli() {
   const { user, logout } = useAuthStore();
@@ -137,9 +138,6 @@ export default function DashboardAhli() {
           <PakejIndividual />
         </Tab>
       </Tabs>
-      <Button onPress={onOpen} color="primary">
-        Show PWA Modal
-      </Button>
       <PwaModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}

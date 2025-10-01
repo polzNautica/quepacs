@@ -47,9 +47,8 @@ export default function PageSpinner() {
           >
             <Spinner size="lg" />
             <p
-              className={`mt-4 text-white-600 animate-pulse flex bg-black text-xs px-2 py-1 rounded ${
-                timer > 0 ? "visible" : "invisible"
-              }`}
+              className={`mt-4 text-white animate-pulse flex bg-black/50 text-xs px-2 py-1 rounded 
+                ${timer > 0 ? "visible" : "invisible"}`}
             >
               {timer > 10
                 ? `Sebentar... (${timer}s)`

@@ -1,3 +1,5 @@
+"use client";
+
 import { useAuthStore } from "@/stores/auth-store";
 import { siteConfig } from "@/config/site";
 import { ROLES } from "@/constants/roles";
@@ -53,14 +55,13 @@ export const Navbar = () => {
 
   // Check if a link is active/selected
   const isLinkActive = (href: string) => {
-    if (href === '/') {
-      return pathname === '/';
+    if (href === "/") {
+      return pathname === "/";
     }
     return pathname.startsWith(href);
   };
 
-  const handleLogout = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleLogout = () => {
     logout();
   };
 
@@ -88,7 +89,7 @@ export const Navbar = () => {
                       "data-[active=true]:text-primary data-[active=true]:font-medium cursor-pointer"
                     )}
                     color="foreground"
-                    onClick={handleLogout}
+                    onPress={handleLogout}
                   >
                     {item.label}
                   </Link>
@@ -97,8 +98,8 @@ export const Navbar = () => {
                     className={clsx(
                       linkStyles({ color: "foreground" }),
                       "transition-colors duration-200",
-                      isLinkActive(item.href) 
-                        ? "text-primary font-semibold" 
+                      isLinkActive(item.href)
+                        ? "text-primary font-semibold"
                         : "text-foreground/70 hover:text-foreground"
                     )}
                     color="foreground"
@@ -118,38 +119,32 @@ export const Navbar = () => {
         {!isAuthenticated && (
           <NavbarItem className="hidden lg:flex">
             <div className="hidden lg:flex gap-4">
-              <Button 
-                variant="ghost" 
-                color="primary" 
+              <Button
+                variant="ghost"
+                color="primary"
                 className={clsx(
                   "rounded-full",
-                  isLinkActive('/login') && "bg-primary/20"
+                  isLinkActive("/login") && "bg-primary/20"
                 )}
                 size="sm"
               >
-                <NextLink 
-                  href="/login" 
-                  className={clsx(
-                    "text-sm gap-2 flex items-center",
-                  )}
+                <NextLink
+                  href="/login"
+                  className={clsx("text-sm gap-2 flex items-center")}
                 >
                   <span>Log Masuk</span>
                   <Icon icon="mdi:login" />
                 </NextLink>
               </Button>
-              <Button 
-                variant="shadow" 
-                color="primary" 
-                className={clsx(
-                  "rounded-full"
-                )}
+              <Button
+                variant="shadow"
+                color="primary"
+                className={clsx("rounded-full")}
                 size="sm"
               >
-                <NextLink 
-                  href="/register" 
-                  className={clsx(
-                    "text-sm gap-2 flex items-center"
-                  )}
+                <NextLink
+                  href="/register"
+                  className={clsx("text-sm gap-2 flex items-center")}
                 >
                   <span>Daftar Sekarang</span>
                   <Icon icon="mdi:account-plus" />
@@ -165,12 +160,63 @@ export const Navbar = () => {
                 isBordered
                 as="button"
                 className="transition-transform"
-                color={isLinkActive('/profile') ? "primary" : "secondary"}
+                color={isLinkActive("/profil") ? "primary" : "secondary"}
                 size="sm"
                 src="https://i.pravatar.cc/150"
               />
             </DropdownTrigger>
-            <DropdownMenu aria-label="Profile Actions">
+            {user.role_id === ROLES.ADMIN && (
+              <DropdownMenu aria-label="Profile Actions">
+                <DropdownItem key="user" textValue="user" isReadOnly>
+                  <p className="text-xs">
+                    {user?.fullname} ({user?.role})
+                  </p>
+                  <p className="text-xs text-primary mb-2">{user?.email}</p>
+                  <Divider />
+                </DropdownItem>
+                <DropdownItem
+                  key="profile"
+                  textValue="profile"
+                  className={isLinkActive("/profil") ? "bg-primary/10" : ""}
+                >
+                  <NextLink
+                    href="/profil"
+                    className="text-foreground text-sm flex items-center w-full"
+                  >
+                    <Icon icon="mdi:account" />
+                    <span className="ml-2">Profil</span>
+                  </NextLink>
+                </DropdownItem>
+                <DropdownItem
+                  key="settings"
+                  textValue="settings"
+                  className={isLinkActive("/tetapan") ? "bg-primary/10" : ""}
+                >
+                  <NextLink
+                    href="/tetapan"
+                    className="text-foreground text-sm flex items-center w-full"
+                  >
+                    <Icon icon="mdi:cog" />
+                    <span className="ml-2">Settings</span>
+                  </NextLink>
+                </DropdownItem>
+                <DropdownItem
+                  key="logout"
+                  textValue="logout"
+                  className="text-danger"
+                >
+                  <Link
+                    onPress={handleLogout}
+                    className="text-foreground text-sm"
+                  >
+                    <Icon icon="mdi:logout" />
+                    <span className="ml-2">Log Keluar</span>
+                  </Link>
+                </DropdownItem>
+              </DropdownMenu>
+            )}
+            {user.role_id === ROLES.AHLI && (
+              <DropdownMenu aria-label="Profile Actions">
               <DropdownItem key="user" textValue="user" isReadOnly>
                 <p className="text-xs">
                   {user?.fullname} ({user?.role})
@@ -181,9 +227,9 @@ export const Navbar = () => {
               <DropdownItem 
                 key="profile" 
                 textValue="profile"
-                className={isLinkActive('/profile') ? "bg-primary/10" : ""}
+                className={isLinkActive('/ahli/profil') ? "bg-primary/10" : ""}
               >
-                <NextLink href="/profile" className="text-foreground text-sm flex items-center w-full">
+                <NextLink href="/ahli/profil" className="text-foreground text-sm flex items-center w-full">
                   <Icon icon="mdi:account" />
                   <span className="ml-2">Profil</span>
                 </NextLink>
@@ -191,9 +237,9 @@ export const Navbar = () => {
               <DropdownItem 
                 key="settings" 
                 textValue="settings"
-                className={isLinkActive('/settings') ? "bg-primary/10" : ""}
+                className={isLinkActive('/ahli/tetapan') ? "bg-primary/10" : ""}
               >
-                <NextLink href="/settings" className="text-foreground text-sm flex items-center w-full">
+                <NextLink href="/ahli/tetapan" className="text-foreground text-sm flex items-center w-full">
                   <Icon icon="mdi:cog" />
                   <span className="ml-2">Settings</span>
                 </NextLink>
@@ -203,15 +249,16 @@ export const Navbar = () => {
                 textValue="logout"
                 className="text-danger"
               >
-                <button
-                  onClick={handleLogout}
-                  className="text-foreground text-sm flex items-center w-full text-left"
+                <Link
+                  onPress={handleLogout}
+                  className="text-foreground text-sm"
                 >
                   <Icon icon="mdi:logout" />
                   <span className="ml-2">Log Keluar</span>
-                </button>
+                </Link>
               </DropdownItem>
             </DropdownMenu>
+            )}
           </Dropdown>
         )}
       </NavbarContent>
@@ -221,15 +268,15 @@ export const Navbar = () => {
           {navItems.map((item, index) => (
             <NavbarMenuItem key={`${item.href}-${index}`}>
               {item.href === "/logout" ? (
-                <button
+                <Link
                   className={clsx(
                     "w-full text-left p-2 rounded-lg transition-colors",
-                    "text-foreground hover:bg-default-100 cursor-pointer"
+                    "hover:bg-default-100 cursor-pointer"
                   )}
-                  onClick={handleLogout}
+                  onPress={handleLogout}
                 >
                   {item.label}
-                </button>
+                </Link>
               ) : (
                 <NextLink
                   href={item.href}

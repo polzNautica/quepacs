@@ -11,6 +11,7 @@ import { useLoadingStore } from "@/lib/useLoadingStore";
 import { fontSans, fontMono } from "@/config/fonts";
 import "@/styles/globals.css";
 import { useAuthStore } from "@/stores/auth-store";
+import NProgressBar from '@/components/NProgress';
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -47,6 +48,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <NextThemesProvider attribute="class" defaultTheme="dark">
       <HeroUIProvider navigate={router.push}>
+        <NProgressBar />
         <Background />
         <PageSpinner />
         <div className="fixed inset-x-0 top-0 z-[100] flex justify-center">
