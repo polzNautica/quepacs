@@ -1,87 +1,74 @@
 self.addEventListener("install", (event) => {
-  console.log("[Service Worker] Installed");
+  console.log("[Service Worker] Installing...");
+  self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
+  console.log("[Service Worker] Activating...");
   event.waitUntil(self.clients.claim());
-  console.log("[Service Worker] Activated & controlling clients");
+  caches.keys().then((cacheNames) => {
+    return Promise.all(
+      cacheNames.map((cacheName) => {
+        if (cacheName.startsWith("push-")) {
+          return caches.delete(cacheName);
+        }
+      })
+    );
+  });
+  console.log("[Service Worker] Ready for push notifications!");
 });
 
+// Push event handler
+self.addEventListener("push", (event) => {
+  console.log("[Service Worker] Push received");
 
-self.addEventListener("fetch", (event) => {
-  event.respondWith(fetch(event.request));
-});
-
-self.addEventListener("message", (event) => {
-  if (event.data.action === "skipWaiting") {
-    self.skipWaiting();
-  }
-});
-
-self.addEventListener('push', function (event) {
   if (!event.data) return;
 
-  const data = event.data.json();
-  const options = {
-    body: data.body,
-    icon: '/icons/web-app-manifest-192x192.png',
-    badge: '/icons/favicon-96x96.png',
-    vibrate: [100, 50, 100],
-    data: {
-      url: data.url || '/'
-    },
-    actions: [
-      {
-        action: 'open',
-        title: 'Open App'
-      },
-      {
-        action: 'close',
-        title: 'Close'
-      }
-    ]
-  };
-
-  event.waitUntil(
-    self.registration.showNotification(data.title, options)
-  );
-});
-
-self.addEventListener('notificationclick', function (event) {
-  event.notification.close();
-
-  if (event.action === 'close') {
-    return;
+  let data;
+  try {
+    data = event.data.json();
+  } catch (error) {
+    data = {
+      title: "New Notification",
+      body: "You have a new message",
+    };
   }
 
+  const options = {
+    body: data.body,
+    icon: "/icons/web-app-manifest-192x192.png",
+    badge: "/icons/favicon-96x96.png",
+    data: { url: data.url || "/" },
+    actions: [
+      { action: "open", title: "Open" },
+      { action: "close", title: "Close" },
+    ],
+    tag: data.tag,
+    requireInteraction: data.requireInteraction || false,
+  };
+
+  event.waitUntil(self.registration.showNotification(data.title, options));
+});
+
+// Notification click handler
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+
+  if (event.action === "close") return;
+
   event.waitUntil(
-    clients.matchAll({ type: 'window' }).then(function (clientList) {
-      const url = event.notification.data.url || '/';
-      
+    clients.matchAll({ type: "window" }).then((clientList) => {
+      const url = event.notification.data?.url || "/";
+
       for (const client of clientList) {
-        if (client.url === url && 'focus' in client) {
+        if (client.url.includes(url) && "focus" in client) {
           return client.focus();
         }
       }
-      
+
       if (clients.openWindow) {
         return clients.openWindow(url);
       }
     })
   );
 });
-
-self.addEventListener('pushsubscriptionchange', function (event) {
-  event.waitUntil(
-    self.registration.pushManager.subscribe(event.oldSubscription.options)
-      .then(function (subscription) {
-        // Send new subscription to your server
-        return fetch('/api/push/subscription', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ subscription })
-        });
-      })
-  );
-});
-

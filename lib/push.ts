@@ -1,12 +1,11 @@
 import webpush from "web-push";
 
-// Initialize web-push with your VAPID keys
 const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
 const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY;
 
 if (vapidPublicKey && vapidPrivateKey) {
   webpush.setVapidDetails(
-    "mailto:gtppower00@gmail.com", // Change this to your email
+    "mailto:gtppower00@gmail.com", 
     vapidPublicKey,
     vapidPrivateKey
   );
