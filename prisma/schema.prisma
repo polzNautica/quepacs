@@ -48,13 +48,31 @@ model user {
   jwt_token        jwt_token[]
   role_id          Int
   role             role               @relation(fields: [role_id], references: [id])
+  UserDetail       UserDetail?
   PushSubscription PushSubscription[]
   Notification     Notification[]
 }
 
-model user_detail {
-  id   Int    @id @default(autoincrement())
-  name String @unique(map: "name") @db.VarChar(50)
+model UserDetail {
+  id                    Int       @id @default(autoincrement())
+  userId                Int       @unique
+  address1              String?
+  address2              String?
+  address3              String?
+  postcode              String?   @db.VarChar(5)
+  city                  String?
+  state                 String?
+  country               String?   @default("Malaysia")
+  phoneHome             String?   @db.VarChar(20)
+  emergencyContactName  String?
+  emergencyContactPhone String?   @db.VarChar(20)
+  dateOfBirth           DateTime?
+  placeOfBirth          String?
+  photo                 Bytes?
+  maritalStatus         String?   @db.VarChar(20)
+  user                  user      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_detail")
 }
 
 model role {

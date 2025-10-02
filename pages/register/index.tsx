@@ -1,4 +1,3 @@
-// pages/register.tsx
 import { useState } from "react";
 import {
   registerFieldValidator,
@@ -38,7 +37,7 @@ export const genderOptions = [
 
 export default function RegisterPage() {
   const router = useRouter();
-  const {setLoading, loading} = useLoadingStore();
+  const { setLoading, loading } = useLoadingStore();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
@@ -245,18 +244,11 @@ export default function RegisterPage() {
                     className="text-default-400"
                   />
                 }
-                validate={(value) => {
-                  // Custom validation for NRIC/Passport based on nationality
-                  if (isMalaysian) {
-                    return /^[0-9]{6,12}$/.test(value)
-                      ? null
-                      : "Format NRIC tidak sah";
-                  } else {
-                    return /^[a-zA-Z0-9]{6,20}$/.test(value)
-                      ? null
-                      : "Format Passport tidak sah";
-                  }
-                }}
+                validate={
+                  isMalaysian
+                    ? registerFieldValidator("nric")
+                    : registerFieldValidator("passport")
+                }
               />
 
               <Input
