@@ -6,12 +6,18 @@ const pwaConfig = withPWA({
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development',
   workboxOptions: {
-    // Exclude files that may not always exist
-    exclude: [/dynamic-css-manifest\.json$/],
+    // Skip waiting for problematic files
+    skipWaiting: true,
+    // Don't precache these file patterns
+    exclude: [
+      /.*dynamic-css-manifest.*/,
+      /.*middleware-manifest.*/,
+      /.*build-manifest.*/,
+      /.*react-loadable-manifest.*/
+    ],
   },
 });
 
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
 };
