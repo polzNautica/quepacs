@@ -28,38 +28,37 @@ export async function sendPushNotification(
     data?: any;
   }
 ) {
-  // const response = await fetch(subscription.endpoint, {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify({
-  //     title: payload.title,
-  //     body: payload.body,
-  //     url: payload.url,
-  //     data: payload.data,
-  //   }),
-  // });
-
-  // if (!response.ok) {
-  //   throw new Error(`Push notification failed: ${response.statusText}`);
-  // }
-
-  // return response;
   try {
+    // Create the notification payload that the service worker expects
     const pushPayload = JSON.stringify({
       title: payload.title,
       body: payload.body,
       icon: "/icons/web-app-manifest-192x192.png",
       badge: "/icons/favicon-96x96.png",
+      // image: "/icons/web-app-manifest-192x192.png",
+      url: payload.url || "/",
       data: {
         url: payload.url || "/",
         ...payload.data,
       },
+      // Add these for better notification display
+      tag: `notification-${Date.now()}`, // Prevents duplicate notifications
+      requireInteraction: true, // Keeps notification visible until dismissed
+      actions: [
+        {
+          action: 'open',
+          title: 'Open App',
+          icon: '/icons/web-app-manifest-192x192.png'
+        },
+        {
+          action: 'close',
+          title: 'Close',
+          icon: '/icons/web-app-manifest-192x192.png'
+        }
+      ]
     });
 
     const result = await webpush.sendNotification(subscription, pushPayload);
-
     return result;
   } catch (error: any) {
     console.error("Push notification error details:", {
@@ -67,6 +66,13 @@ export async function sendPushNotification(
       body: error.body,
       endpoint: subscription.endpoint,
     });
+    
+    // If subscription is invalid, you might want to remove it from database
+    if (error.statusCode === 410) { // Gone - subscription no longer valid
+      console.log(`Subscription expired: ${subscription.endpoint}`);
+      // You could add logic here to delete the subscription from your database
+    }
+    
     throw error;
   }
 }
