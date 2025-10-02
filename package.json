@@ -5,6 +5,7 @@
   "private": true,
   "proxy": "http://localhost:3000",
   "scripts": {
+    "postinstall": "prisma generate",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
