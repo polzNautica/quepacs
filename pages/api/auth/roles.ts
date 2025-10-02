@@ -6,7 +6,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    const roles = await prisma.roles.findMany();
+    const roles = await prisma.role.findMany();
     return res.status(200).json(roles);
   }
 
@@ -16,7 +16,7 @@ export default async function handler(
     if (!name) return res.status(400).json({ error: "Role name is required" });
 
     try {
-      const newRole = await prisma.roles.create({
+      const newRole = await prisma.role.create({
         data: { name },
       });
       return res.status(201).json(newRole);

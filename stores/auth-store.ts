@@ -6,6 +6,7 @@ import { ROLES } from "@/constants/roles";
 
 interface User {
   id: number;
+  nric: string;
   email: string;
   username: string | null;
   fullname: string;

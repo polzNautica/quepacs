@@ -204,11 +204,9 @@ export const Navbar = () => {
                   key="logout"
                   textValue="logout"
                   className="text-danger"
+                  onPress={handleLogout}
                 >
-                  <Link
-                    onPress={handleLogout}
-                    className="text-foreground text-sm"
-                  >
+                  <Link className="text-foreground text-sm">
                     <Icon icon="mdi:logout" />
                     <span className="ml-2">Log Keluar</span>
                   </Link>
@@ -217,47 +215,55 @@ export const Navbar = () => {
             )}
             {user.role_id === ROLES.AHLI && (
               <DropdownMenu aria-label="Profile Actions">
-              <DropdownItem key="user" textValue="user" isReadOnly>
-                <p className="text-xs">
-                  {user?.fullname} ({user?.role})
-                </p>
-                <p className="text-xs text-primary mb-2">{user?.email}</p>
-                <Divider />
-              </DropdownItem>
-              <DropdownItem 
-                key="profile" 
-                textValue="profile"
-                className={isLinkActive('/ahli/profil') ? "bg-primary/10" : ""}
-              >
-                <NextLink href="/ahli/profil" className="text-foreground text-sm flex items-center w-full">
-                  <Icon icon="mdi:account" />
-                  <span className="ml-2">Profil</span>
-                </NextLink>
-              </DropdownItem>
-              <DropdownItem 
-                key="settings" 
-                textValue="settings"
-                className={isLinkActive('/ahli/tetapan') ? "bg-primary/10" : ""}
-              >
-                <NextLink href="/ahli/tetapan" className="text-foreground text-sm flex items-center w-full">
-                  <Icon icon="mdi:cog" />
-                  <span className="ml-2">Settings</span>
-                </NextLink>
-              </DropdownItem>
-              <DropdownItem
-                key="logout"
-                textValue="logout"
-                className="text-danger"
-              >
-                <Link
-                  onPress={handleLogout}
-                  className="text-foreground text-sm"
+                <DropdownItem key="user" textValue="user" isReadOnly>
+                  <p className="text-xs">
+                    {user?.fullname} ({user?.role})
+                  </p>
+                  <p className="text-xs text-primary mb-2">{user?.email}</p>
+                  <Divider />
+                </DropdownItem>
+                <DropdownItem
+                  key="profile"
+                  textValue="profile"
+                  className={
+                    isLinkActive("/ahli/profil") ? "bg-primary/10" : ""
+                  }
                 >
-                  <Icon icon="mdi:logout" />
-                  <span className="ml-2">Log Keluar</span>
-                </Link>
-              </DropdownItem>
-            </DropdownMenu>
+                  <NextLink
+                    href="/ahli/profil"
+                    className="text-foreground text-sm flex items-center w-full"
+                  >
+                    <Icon icon="mdi:account" />
+                    <span className="ml-2">Profil</span>
+                  </NextLink>
+                </DropdownItem>
+                <DropdownItem
+                  key="settings"
+                  textValue="settings"
+                  className={
+                    isLinkActive("/ahli/tetapan") ? "bg-primary/10" : ""
+                  }
+                >
+                  <NextLink
+                    href="/ahli/tetapan"
+                    className="text-foreground text-sm flex items-center w-full"
+                  >
+                    <Icon icon="mdi:cog" />
+                    <span className="ml-2">Settings</span>
+                  </NextLink>
+                </DropdownItem>
+                <DropdownItem
+                  key="logout"
+                  textValue="logout"
+                  className="text-danger"
+                  onPress={handleLogout}
+                >
+                  <Link className="text-foreground text-sm">
+                    <Icon icon="mdi:logout" />
+                    <span className="ml-2">Log Keluar</span>
+                  </Link>
+                </DropdownItem>
+              </DropdownMenu>
             )}
           </Dropdown>
         )}

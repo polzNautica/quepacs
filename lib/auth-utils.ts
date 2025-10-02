@@ -6,6 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "3289235de9a14ca3dfa6658bdfcb6a44";
 
 export interface UserSession {
   id: number;
+  nric: string;
   email: string;
   username: string | null;
   fullname: string;
@@ -56,6 +57,7 @@ export async function verifyAndGetUser(token: string): Promise<UserSession | nul
 
     return {
       id: tokenRecord.user.id,
+      nric: tokenRecord.user.nric,
       email: tokenRecord.user.email,
       username: tokenRecord.user.username,
       fullname: tokenRecord.user.fullname,

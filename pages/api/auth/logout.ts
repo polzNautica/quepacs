@@ -5,11 +5,7 @@ import { useLoadingStore } from "@/lib/useLoadingStore";
 
 const JWT_SECRET = process.env.JWT_SECRET || "3289235de9a14ca3dfa6658bdfcb6a44";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-
-  const setLoading = useLoadingStore((state) => state.setLoading);
-  setLoading(true);
-  
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {  
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -45,7 +41,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (error: any) {
     console.error("Logout error:", error);
     return res.status(401).json({ error: "Invalid or expired token" });
-  } finally {
-    setLoading(false);
   }
 }

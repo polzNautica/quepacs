@@ -66,6 +66,7 @@ export default async function handler(
 
       const userData = {
         id: user.id,
+        nric: user.nric,
         email: user.email,
         username: user.username,
         fullname: user.fullname,

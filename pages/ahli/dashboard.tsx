@@ -83,7 +83,7 @@ export default function DashboardAhli() {
       <Divider className="mb-2" />
       <div className="flex flex-col mb-4">
         <p className="text-sm">Selamat datang,</p>
-        <Code color="secondary">{user?.fullname}</Code>
+        <Code color="secondary"><p className="whitespace-normal">{user?.fullname}</p></Code>
       </div>
       <div className="grid grid-cols-2 gap-2 align-center justify-center mb-4">
         <Link href={"#"}>
