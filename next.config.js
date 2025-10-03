@@ -37,7 +37,7 @@ const nextConfig = {
 
 export default withPWA({
   dest: 'public',
-  swSrc: 'public/sw.js',
+  swSrc: '/public/sw-registration.js',
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development',
