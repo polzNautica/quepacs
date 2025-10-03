@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
-        .register("/sw.js")
+        .register("/sw.js", { type: "module" })
         .then(() => console.log("Service Worker registered"))
         .catch((err) =>
           console.error("Service Worker registration failed", err)
