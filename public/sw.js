@@ -12,6 +12,8 @@ if (typeof window !== "undefined" && window.__NEXT_DATA__) {
   }
 }
 
+self.numBadges = self.numBadges || 0; 
+
 self.addEventListener("install", (event) => {
   console.log("[Service Worker] Installed");
 });
@@ -59,16 +61,16 @@ self.addEventListener("push", function (event) {
   };
 
   event.waitUntil(
-    self.registration.showNotification(title, options).then(
-      hasActiveClients
-        .then((activeClients) => {
-          if (!activeClients) {
-            self.numBadges += 1;
-            navigator.setAppBadge(self.numBadges);
-          }
-        })
-        .catch((err) => sendMessage(err))
-    )
+    self.registration.showNotification(title, options).then(() => {
+      self.registration.clients.matchAll({ type: "window" }).then((activeClients) => {
+        if (activeClients.length === 0) {
+          self.numBadges += 1;
+          navigator.setAppBadge(self.numBadges);
+        }
+      }).catch((err) => {
+        console.error("Error handling push notification:", err);
+      });
+    })
   );
 });
 
@@ -84,7 +86,7 @@ self.addEventListener("notificationclick", function (event) {
       const url = event.notification.data.url || "/";
 
       for (const client of clientList) {
-        if (client.url === url && "focus" in client) {
+        if (client.url && client.url === url && "focus" in client) {
           return client.focus();
         }
       }
