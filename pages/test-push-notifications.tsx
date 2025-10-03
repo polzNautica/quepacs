@@ -182,7 +182,7 @@ export default function PushNotificationTest() {
         <h1 className="text-2xl font-bold mb-6">Push Notification Test</h1>
 
         {/* System Status */}
-        <div className="bg-gray-100 p-4 rounded-lg mb-6">
+        <div className="p-4 rounded-lg mb-6">
           <h2 className="text-lg font-semibold mb-2">System Status</h2>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>

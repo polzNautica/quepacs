@@ -47,7 +47,8 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       throw new Error("Notification permission denied");
     }
 
-    let registration: ServiceWorkerRegistration;
+    // let registration: ServiceWorkerRegistration;
+    let registration = await navigator.serviceWorker.getRegistration();
     try {
       registration = await navigator.serviceWorker.register("/sw.js", {
         scope: "/",
@@ -56,7 +57,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
 
       if (registration.installing) {
         await new Promise<void>((resolve) => {
-          const worker = registration.installing!;
+          const worker = registration?.installing!;
           worker.addEventListener("statechange", () => {
             if (worker.state === "activated") {
               console.log("Service Worker activated");

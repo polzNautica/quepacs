@@ -1,6 +1,6 @@
-import { precacheAndRoute } from 'workbox-precaching';
+import { precacheAndRoute } from "workbox-precaching";
 
-precacheAndRoute(self.__WB_MANIFEST);
+precacheAndRoute(self.__BUILD_MANIFEST);
 
 self.addEventListener("install", (event) => {
   console.log("[Service Worker] Installed");
@@ -38,6 +38,7 @@ self.addEventListener("push", function (event) {
     vibrate: [100, 50, 100],
     data: {
       url: data.url || "/",
+      dateOfArrival: Date.now(),
     },
     actions: [
       {
@@ -51,7 +52,18 @@ self.addEventListener("push", function (event) {
     ],
   };
 
-  event.waitUntil(self.registration.showNotification(title, options));
+  event.waitUntil(
+    self.registration.showNotification(title, options).then(
+      hasActiveClients
+        .then((activeClients) => {
+          if (!activeClients) {
+            self.numBadges += 1;
+            navigator.setAppBadge(self.numBadges);
+          }
+        })
+        .catch((err) => sendMessage(err))
+    )
+  );
 });
 
 self.addEventListener("notificationclick", function (event) {
