@@ -28,10 +28,8 @@ const nextConfig = {
 
 export default withPWA({
   dest: 'public',
-  swSrc: 'public/sw.js',
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development',
-  sw: 'sw.js',
   buildExcludes: [/dynamic-css-manifest\.json$/],
 })(nextConfig);
