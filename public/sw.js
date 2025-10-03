@@ -1,16 +1,6 @@
-if (typeof window !== "undefined" && window.__NEXT_DATA__) {
-  const isProd = window.__NEXT_DATA__.env === "production"; 
+import { precacheAndRoute } from "workbox-precaching";
 
-  if (isProd) {
-    import("workbox-precaching").then(({ precacheAndRoute }) => {
-      precacheAndRoute(self.__WB_MANIFEST || []);
-    }).catch((err) => {
-      console.error("Error loading Workbox in production:", err);
-    });
-  } else {
-    console.log("Service Worker in development mode, Workbox not loaded");
-  }
-}
+precacheAndRoute(self.__WB_MANIFEST);
 
 self.numBadges = self.numBadges || 0; 
 
