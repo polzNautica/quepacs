@@ -31,6 +31,10 @@ export const siteConfig = {
       href: "/admin/pengurusanpengguna",
     },
     {
+      label: "Notifikasi",
+      href: "/admin/notifications",
+    },
+    {
       label: "Laporan",
       href: "/admin/laporan",
     },

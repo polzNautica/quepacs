@@ -28,15 +28,15 @@ export default function ProtectedRoute({
   useEffect(() => {
     if (!isInitialized) return;
 
-    console.log("ProtectedRoute: State update", {
-      isInitialized,
-      isAuthenticated,
-      user: user?.role_id,
-      allowedRoles,
-    });
+    // console.log("ProtectedRoute: State update", {
+    //   isInitialized,
+    //   isAuthenticated,
+    //   user: user?.role_id,
+    //   allowedRoles,
+    // });
 
     if (!isAuthenticated) {
-      console.log("ProtectedRoute: Not authenticated, redirecting to login");
+      // console.log("ProtectedRoute: Not authenticated, redirecting to login");
       router.replace("/login");
       return;
     }
@@ -49,7 +49,7 @@ export default function ProtectedRoute({
       return;
     }
 
-    console.log("ProtectedRoute: Access granted");
+    // console.log("ProtectedRoute: Access granted");
     setAccessChecked(true);
   }, [isInitialized, isAuthenticated, user, allowedRoles, router]);
 

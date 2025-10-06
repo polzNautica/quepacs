@@ -82,7 +82,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
 
     const applicationServerKey = urlBase64ToUint8Array(vapidPublicKey);
 
-    console.log("Subscribing with applicationServerKey:", applicationServerKey);
+    // console.log("Subscribing with applicationServerKey:", applicationServerKey);
 
     // Subscribe to push notifications - FIXED: Properly convert VAPID key
     const subscription = await registration.pushManager.subscribe({

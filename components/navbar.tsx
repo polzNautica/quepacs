@@ -206,10 +206,10 @@ export const Navbar = () => {
                   className="text-danger"
                   onPress={handleLogout}
                 >
-                  <Link className="text-foreground text-sm">
+                  <div className="text-foreground text-sm flex flex-row items-center">
                     <Icon icon="mdi:logout" />
                     <span className="ml-2">Log Keluar</span>
-                  </Link>
+                  </div>
                 </DropdownItem>
               </DropdownMenu>
             )}
@@ -258,10 +258,10 @@ export const Navbar = () => {
                   className="text-danger"
                   onPress={handleLogout}
                 >
-                  <Link className="text-foreground text-sm">
+                  <div className="text-foreground text-sm flex flex-row items-center">
                     <Icon icon="mdi:logout" />
                     <span className="ml-2">Log Keluar</span>
-                  </Link>
+                  </div>
                 </DropdownItem>
               </DropdownMenu>
             )}
