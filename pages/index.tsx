@@ -13,47 +13,46 @@ export default function IndexPage() {
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <div className="inline-block max-w-xl text-center justify-center">
-          <span className={title()}>Make Test&nbsp;</span>
-          <span className={title({ color: "violet" })}>beautiful&nbsp;</span>
+          {/* <span className={title()}>Make Test&nbsp;</span> */}
+          <span className={title()}>Pengurusan Subkribsi</span>
           <br />
-          <span className={title()}>
-            websites regardless of your design experience.
+          <span className={title({ color: "blue" })}>
+            Quepacs Kasih&nbsp;
           </span>
+          <br />
           <div className={subtitle({ class: "mt-4" })}>
-            Beautiful, fast and modern React UI library.
+            Pengurusan dan Semakan status subkribsi di dalam tangan.
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex flex-col">
           <Link
-            isExternal
             className={buttonStyles({
               color: "primary",
               radius: "full",
               variant: "shadow",
             })}
-            href={siteConfig.links.docs}
+            href="/register"
           >
-            Documentation
+            Daftar Sekarang
           </Link>
+          <br />
           <Link
-            isExternal
             className={buttonStyles({ variant: "bordered", radius: "full" })}
-            href={siteConfig.links.github}
+            href="/login"
           >
-            <GithubIcon size={20} />
-            GitHub
+            Log Masuk
           </Link>
         </div>
 
-        <div className="mt-8">
+        {/* <div className="mt-8">
           <Snippet hideCopyButton hideSymbol variant="bordered">
             <span>
               Get started by editing{" "}
               <Code color="primary">pages/index.tsx</Code>
             </span>
           </Snippet>
-        </div>
+        </div> */}
       </section>
     </DefaultLayout>
   );
