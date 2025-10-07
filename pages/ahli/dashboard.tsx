@@ -18,10 +18,9 @@ import { useLoadingStore } from "@/lib/useLoadingStore";
 import { useEffect, useState } from "react";
 import { PwaModal } from "@/components/PwaModal";
 import { useDisclosure } from "@heroui/react";
-import ActionCard from "@/components/heroui/action-card";
 
 export default function DashboardAhli() {
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
   const setLoading = useLoadingStore((state) => state.setLoading);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [prompt, setPrompt] = useState<any>(null);
@@ -86,7 +85,7 @@ export default function DashboardAhli() {
         <Code color="secondary"><p className="whitespace-normal">{user?.fullname}</p></Code>
       </div>
       <div className="grid grid-cols-2 gap-2 align-center justify-center mb-4">
-        <Link href={"#"}>
+        <Link href="/ahli/subkribsi">
           <Card className="dark:bg-default-100/50 w-full p-2 shadown-sm h-full">
             <div className="flex flex-col ml-2 text-sm">
               <div className="flex flex-row items-center">
