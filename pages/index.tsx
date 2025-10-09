@@ -21,7 +21,7 @@ export default function IndexPage() {
           </span>
           <br />
           <div className={subtitle({ class: "mt-4" })}>
-            Pengurusan dan Semakan status subkribsi di dalam tangan.
+            Pengurusan dan semakan status subkribsi dalam talian.
           </div>
         </div>
 
