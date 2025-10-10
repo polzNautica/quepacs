@@ -89,6 +89,64 @@ export default function DashboardAhli() {
     }
   };
 
+  const slides = [
+    {
+      image: "https://picsum.photos/seed/1/500/300",
+      name: "Demo 01",
+    },
+    {
+      image: "https://picsum.photos/seed/2/500/300",
+      name: "Demo 02",
+    },
+    {
+      image: "https://picsum.photos/seed/3/500/300",
+      name: "Demo 03",
+    },
+    {
+      image: "https://picsum.photos/seed/4/500/300",
+      name: "Demo 04",
+    },
+    {
+      image: "https://picsum.photos/seed/5/500/300",
+      name: "Demo 05",
+    },
+    {
+      image: "https://picsum.photos/seed/6/500/300",
+      name: "Demo 06",
+    },
+    {
+      image: "https://picsum.photos/seed/7/500/300",
+      name: "Demo 07",
+    },
+    {
+      image: "https://picsum.photos/seed/8/500/300",
+      name: "Demo 08",
+    },
+  ];
+
+  const badges = [
+    {
+      name: "Mutiara Kasih",
+      src: "/dashboard-icon/honor.svg",
+    },
+    {
+      name: "Intan Kasih",
+      src: "/dashboard-icon/information.svg",
+    },
+    {
+      name: "Zamrud Kasih",
+      src: "/dashboard-icon/inspiration.svg",
+    },
+    {
+      name: "Berlian Kasih",
+      src: "/dashboard-icon/picture.svg",
+    },
+    {
+      name: "Pelan Sakinah",
+      src: "/dashboard-icon/line-graph.svg",
+    },
+  ];
+
   return (
     <AhliLayout>
       <h1 className="font-bold">Dashboard</h1>
@@ -105,13 +163,17 @@ export default function DashboardAhli() {
           <Card className="dark:bg-default-100/50 w-full p-2 shadown-sm h-full">
             <div className="flex flex-col ml-2 text-sm">
               <div className="flex flex-row items-center">
-                <b className="mr-2">Subkribsi</b>
-                <Icon icon="line-md:coffee-twotone-loop" />
+                <b className="mr-2 z-10">Subkribsi</b>
               </div>
-              <p color="secondary" className="text-xs">
+              <p color="secondary" className="text-xs z-10">
                 Pengurusan subkribsi anda
               </p>
             </div>
+            <Icon
+              icon="wpf:renew-subscription"
+              className="absolute text-blue-900/15 top-1 right-1"
+              fontSize={"4rem"}
+            />
           </Card>
         </Link>
         <Link href={"#"}>
@@ -119,12 +181,16 @@ export default function DashboardAhli() {
             <div className="flex flex-col ml-2 text-sm">
               <div className="flex flex-row items-center">
                 <b className="mr-2">Referral</b>
-                <Icon icon="line-md:check-list-3-twotone" />
               </div>
               <p color="secondary" className="text-xs">
                 Ajak rakan dan terima ganjaran
               </p>
             </div>
+            <Icon
+              icon="line-md:check-list-3-twotone"
+              className="absolute text-blue-900/15 top-1 right-1"
+              fontSize={"4rem"}
+            />
           </Card>
         </Link>
       </div>
@@ -141,91 +207,44 @@ export default function DashboardAhli() {
         loop={true}
         className="shadow-blue-900/30 shadow-lg"
       >
-        <SwiperSlide>
-          <div className="flex items-center justify-center">
-            <p className="text-xs absolute z-50 text-white bottom-0 left-0 bg-black/50 w-full pl-3">
-              Demo 01
-            </p>
-            <Image
-              src="https://picsum.photos/seed/1/500/300"
-              alt="Picsum"
-              className="rounded-sm"
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="flex items-center justify-center">
-            <p className="text-xs absolute z-50 text-white bottom-0 left-0 bg-black/50 w-full pl-3">
-              Demo 02
-            </p>
-            <Image
-              src="https://picsum.photos/seed/2/500/300"
-              alt="Picsum2"
-              className="rounded-sm"
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="flex items-center justify-center">
-            <p className="text-xs absolute z-50 text-white bottom-0 left-0 bg-black/50 w-full pl-3">
-              Demo 03
-            </p>
-            <Image
-              src="https://picsum.photos/seed/3/500/300"
-              alt="Picsum3"
-              className="rounded-sm"
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="flex items-center justify-center">
-            <p className="text-xs absolute z-50 text-white bottom-0 left-0 bg-black/50 w-full pl-3">
-              Demo 04
-            </p>
-            <Image
-              src="https://picsum.photos/seed/4/500/300"
-              alt="Picsum4"
-              className="rounded-sm"
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="flex items-center justify-center">
-            <p className="text-xs absolute z-50 text-white bottom-0 left-0 bg-black/50 w-full pl-3">
-              Demo 05
-            </p>
-            <Image
-              src="https://picsum.photos/seed/5/500/300"
-              alt="Picsum5"
-              className="rounded-sm"
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="flex items-center justify-center">
-            <p className="text-xs absolute z-50 text-white bottom-0 left-0 bg-black/50 w-full pl-3">
-              Demo 06
-            </p>
-            <Image
-              src="https://picsum.photos/seed/6/500/300"
-              alt="Picsum6"
-              className="rounded-sm"
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="flex items-center justify-center">
-            <p className="text-xs absolute z-50 text-white bottom-0 left-0 bg-black/50 w-full pl-3">
-              Demo 07
-            </p>
-            <Image
-              src="https://picsum.photos/seed/7/500/300"
-              alt="Picsum7"
-              className="rounded-sm"
-            />
-          </div>
-        </SwiperSlide>
+        {slides.map((slide, index) => (
+          <SwiperSlide key={index}>
+            <div className="flex items-center justify-center">
+              <p className="text-xs absolute z-50 text-white bottom-0 left-0 bg-black/50 w-full pl-3">
+                {slide.name}
+              </p>
+              <Image
+                src={slide.image}
+                alt={slide.name}
+                className="rounded-sm"
+              />
+            </div>
+          </SwiperSlide>
+        ))}
       </Swiper>
+
+      <br />
+
+      <div className="grid grid-cols-4 gap-2">
+        {badges.map((item, index) => (
+          <Link
+            href="https://www.mykasihjenazah.com/daftarp.php?p=2"
+            className="flex flex-col items-center gap-1"
+            key={"badge" + index}
+            isExternal
+          >
+            <Image
+              src={item.src}
+              alt={item.name}
+              className="max-h-[40px] p-1 rounded-none"
+              isZoomed
+            />
+            <span className="text-xs truncate w-full text-foreground text-center ">
+              {item.name}
+            </span>
+          </Link>
+        ))}
+      </div>
 
       <br />
 
